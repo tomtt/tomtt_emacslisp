@@ -25,8 +25,8 @@
     (add-to-load-path (expand-file-name "~/.emacslisp/python-mode")))
 
 ;; Add ~/.emacslisp/emacs-rails to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacslisp/emacs-rails"))
-    (add-to-load-path (expand-file-name "~/.emacslisp/emacs-rails")))
+(if (file-exists-p (expand-file-name "~/.emacslisp/rails"))
+    (add-to-load-path (expand-file-name "~/.emacslisp/rails")))
 
 ;; Add ~/.emacslisp/ecb-2.32 to the load-path if the directory exists
 (if (file-exists-p (expand-file-name "~/.emacslisp/ecb-2.32"))
@@ -60,6 +60,7 @@
 (tool-bar-mode 0)
 (menu-bar-mode 1)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(add-hook 'emacs-lisp-mode-hook 'turn-on-font-lock)
 (add-hook 'lisp-mode-hook 'turn-on-font-lock)
 (add-hook 'java-mode-hook 'turn-on-font-lock)
 (add-hook 'php-mode-hook 'turn-on-font-lock)
