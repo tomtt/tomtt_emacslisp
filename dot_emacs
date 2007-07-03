@@ -32,10 +32,6 @@
 (if (file-exists-p (expand-file-name "~/.emacslisp/ecb-2.32"))
     (add-to-load-path (expand-file-name "~/.emacslisp/ecb-2.32")))
 
-;; Add ~/.emacslisp/haskell-mode-2.1 to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacslisp/haskell-mode-2.1"))
-    (add-to-load-path (expand-file-name "~/.emacslisp/haskell-mode-2.1")))
-
 (require 'php-mode)
 (require 'javascript-mode)
 (require 'python-mode)
@@ -64,6 +60,7 @@
 (tool-bar-mode 0)
 (menu-bar-mode 1)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(add-hook 'lisp-mode-hook 'turn-on-font-lock)
 (add-hook 'java-mode-hook 'turn-on-font-lock)
 (add-hook 'php-mode-hook 'turn-on-font-lock)
 (add-hook 'python-mode-hook 'turn-on-font-lock)
