@@ -33,23 +33,18 @@ end"))
   (if snippet
       (snippet-next-field)
     (if (looking-at "\\>")
-	(progn
-	  (hippie-expand nil)
-	  (indent-for-tab-command))
+        (progn
+          (hippie-expand nil)
+          (indent-for-tab-command))
       (indent-for-tab-command))))
 
 (require 'sgml-mode)
 (define-key emacs-lisp-mode-map "\C-j" 'eval-last-sexp)
 (define-key html-mode-map "\t" 'html-indent-or-complete)
 
-(require 'gnuserv)
-(gnuserv-start)
-(setq gnuserv-frame (selected-frame))
-(setenv "GNUSERV_SHOW_EMACS" "1")
+;(require 'gnuserv)
+;(gnuserv-start)
+;(setq gnuserv-frame (selected-frame))
+;(setenv "GNUSERV_SHOW_EMACS" "1")
 
 (provide 'tomtt)
-
-(shell-command "cygpath -u tomtt")
-
-(snippet-with-abbrev-table 'ruby-mode-abbrev-table
-  ("prs" . "    person_id: $${id}"))
