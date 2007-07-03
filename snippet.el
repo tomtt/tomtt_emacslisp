@@ -161,6 +161,19 @@
 ;; the above otherwise you'll get an error.  I use the above in my
 ;; python-mode-hook.
 
+;; Finally, for those running a recent version of Emacs, you can
+;; disable snippet expansion in various parts of the buffer.  I use
+;; this to disable the above "for" expansion while typing comments in
+;; my python code.  Add the following line to your python-mode hook:
+
+;;   (add-hook 'pre-abbrev-expand-hook
+;;             (lambda ()
+;;               (setq local-abbrev-table
+;;                     (if (inside-comment-p)
+;;                         text-mode-abbrev-table
+;;                       python-mode-abbrev-table)))
+;;             nil t)))
+ 
 ;;; Implementation Notes:
 
 ;; This is my first significant chunk of elisp code.  I have very
