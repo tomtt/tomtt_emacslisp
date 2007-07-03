@@ -24,9 +24,13 @@
 (if (file-exists-p (expand-file-name "~/.emacslisp/python-mode"))
     (add-to-load-path (expand-file-name "~/.emacslisp/python-mode")))
 
-;; Add ~/.emacslisp/emacs-rails to the load-path if the directory exists
+;; Add ~/.emacslisp/rails to the load-path if the directory exists
 (if (file-exists-p (expand-file-name "~/.emacslisp/rails"))
     (add-to-load-path (expand-file-name "~/.emacslisp/rails")))
+
+;; Add ~/.emacslisp/color-theme to the load-path if the directory exists
+(if (file-exists-p (expand-file-name "~/.emacslisp/color-theme"))
+    (add-to-load-path (expand-file-name "~/.emacslisp/color-theme")))
 
 (require 'php-mode)
 (require 'javascript-mode)
@@ -70,4 +74,6 @@
    "Evaluate the buffer with ruby."
    (shell-command-on-region (point-min) (point-max) "ruby"))
 
-(setq lconfig-dark-bg-scheme t)
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-taming-mr-arneson)
