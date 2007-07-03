@@ -5,11 +5,11 @@
   (message (format "Passed %S..." path-string))
   (if (stringp path-string)
       (when (file-exists-p path-string)
-	(message (format "Adding %S to load-path..." path-string))
-	(add-to-list 'load-path (expand-file-name path-string)))
+        (message (format "Adding %S to load-path..." path-string))
+        (add-to-list 'load-path (expand-file-name path-string)))
     (crs-add-to-load-path (car path-string))
     (if (cdr path-string)
-	(crs-add-to-load-path (cdr path-string)))))
+        (crs-add-to-load-path (cdr path-string)))))
 
 
 ;; Add ~/.emacs.d/ to the load-path if the directory exists
@@ -28,10 +28,6 @@
 (if (file-exists-p (expand-file-name "~/.emacslisp/rails"))
     (add-to-load-path (expand-file-name "~/.emacslisp/rails")))
 
-;; Add ~/.emacslisp/ecb-2.32 to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacslisp/ecb-2.32"))
-    (add-to-load-path (expand-file-name "~/.emacslisp/ecb-2.32")))
-
 (require 'php-mode)
 (require 'javascript-mode)
 (require 'python-mode)
@@ -40,13 +36,14 @@
 (require 'snippet)
 (require 'rails)
 (require 'tomtt)
+
 (defun try-complete-abbrev (old)
   (if (expand-abbrev) t nil))
 
 (setq hippie-expand-try-functions-list
       '(try-complete-abbrev
-	try-complete-file-name
-	try-expand-dabbrev))
+        try-complete-file-name
+        try-expand-dabbrev))
 
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . php-mode))
@@ -68,68 +65,9 @@
 (add-hook 'ruby-mode-hook 'turn-on-font-lock)
 (add-hook 'sh-mode-hook 'turn-on-font-lock)
 
-;; Set color scheme (set lconfig-dark-bg-scheme to t for reverse color scheme)
-(defconst color-scheme 'dark)
-(defconst foreground-color "gray85")
-(defconst background-color "#6c0000")
-(defconst cursor-color "red3")
-(defconst pointer-color "white")
-
-(if (featurep 'xemacs)
-    (let ((frame (selected-frame)))
-      (set-face-foreground 'default foreground-color)
-      (set-face-background 'default background-color)
-      (setq frame-background-mode color-scheme)
-      color-scheme
-      (set-frame-property frame
-                          'custom-properties
-                          (mapcar (lambda (symbol)
-                                    (if (eql symbol 'light)
-                                        'dark
-                                      symbol))
-                                  (frame-property frame
-                                                  'custom-properties))))
-  (progn 
-     (add-to-list 'default-frame-alist '(foreground-color . "gray65"))
-     (add-to-list 'default-frame-alist '(background-color . "gray10"))
-     (add-to-list 'default-frame-alist '(cursor-color . "red3"))
-     (add-to-list 'default-frame-alist '(background-mode . dark))
-     (set-cursor-color cursor-color)
-     (set-mouse-color pointer-color))
-)
-
-;; comment: red
-;; string: blue
-;; function: SpringGreen1
-;; variable: Gold1
-(custom-set-variables
-  ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
-  ;; Your init file should contain only one such instance.
- )
-(custom-set-faces
-  ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
-  ;; Your init file should contain only one such instance.
- '(font-lock-comment-face ((((class color) (background dark)) (:foreground "red"))))
- '(font-lock-function-name-face ((((class color) (background dark)) (:foreground "SpringGreen1"))))
- '(font-lock-string-face ((((class color) (background dark)) (:foreground "green")))))
-
-;; assumes register 1 is set at argument of getQuery function. Inserts quoteSmart for this argument and moves register to next one.
-(fset 'quote-query-argument
-   [?\C-m up ?\C-i ?\C-x ?r ?  ?2 ?\C-x ?r ?j ?1 ?\C-  M-right ?\M-w right right ?\C-x ?r ?  ?1 ?\C-x ?r ?j ?2 ?\C-y ?  ?= ?  ?D ?a ?t ?a ?b ?a ?s ?e ?C ?o ?n ?n ?e ?c ?t ?o ?r ?: ?: ?q ?u ?o ?t ?e ?S ?m ?a ?r ?t ?( ?\C-y ?) ?\; down ?\C-a])
-
-;; assumes register 1 is set at argument of getQuery function. Inserts quoteSmart for this argument and moves register to next one.
-(fset 'qq
-   [?\C-x ?r ?  ?2 ?\C-x ?r ?j ?1 ?\C-  escape ?\C-f ?\M-w right right ?\C-x ?r ?  ?1 ?\C-x ?r ?j ?2 return up tab ?\C-y ?  ?= ?  ?D ?b ?C ?o ?n ?n ?e ?c ?t ?o ?r ?: ?: ?q ?u ?o ?t ?e ?S ?m ?a ?r ?t ?( ?\C-y ?) ?\; down ?\C-a])
-
-;; Stored in r-register to make next-sql-query work: ['"]\(select\|insert\|delete\|update\) 
-;; Stored in r-register to make next-sql-query work: ['"]\(insert\|delete\|update\) 
-(fset 'next-sql-query
-   [down escape ?x ?s ?e ?a tab ?f ?o tab ?- ?r ?e tab return ?\C-x ?r ?i ?r return ?\C-a escape ?1 ?0 ?\C-l])
-
-(fset 'surround-line-with-prints
-   [?p ?r ?i ?n ?t right ?" ?\C-d ?\C-e ?\\ ?n ?" ?\; down ?\C-a])
-
 ;; Ruby
 (defun ruby-eval-buffer () (interactive)
    "Evaluate the buffer with ruby."
    (shell-command-on-region (point-min) (point-max) "ruby"))
+
+(setq lconfig-dark-bg-scheme t)
