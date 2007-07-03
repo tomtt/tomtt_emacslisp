@@ -38,8 +38,9 @@
 (require 'ruby-mode)
 (require 'inf-ruby)
 (require 'snippet)
-(require 'rails)
+;;(require 'rails)
 (require 'tomtt)
+(load "color-theme-tomtt")
 
 (defun try-complete-abbrev (old)
   (if (expand-abbrev) t nil))
@@ -76,4 +77,14 @@
 
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-taming-mr-arneson)
+
+;; dark
+;(color-theme-hober)
+
+;; dark with green text
+;(color-theme-euphoria)
+
+;; dark bold constructs
+;(color-theme-renegade)
+
+(color-theme-tomtt)
