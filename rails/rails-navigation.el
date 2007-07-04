@@ -220,7 +220,7 @@ Rules for actions/controllers:
                     (current-line-string))))
           (loop for func in rails-on-current-line-gotos
                 until (when (funcall func line prefix) (return t))))
-       (message "Can't switch to some file form this line.")))))
+       (message "Can't switch to some file from this line.")))))
 
 (defvar rails-on-current-line-gotos
   '(rails-line-->partial
