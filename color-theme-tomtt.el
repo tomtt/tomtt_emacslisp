@@ -142,3 +142,5 @@
      (sgml-entity-face ((t (:foreground "gold"))))
      (flyspell-incorrect-face ((t (:foreground "OrangeRed" :bold t :underline t))))
      (flyspell-duplicate-face ((t (:foreground "Gold3" :bold t :underline t)))))))
+
+(color-theme-tomtt)
