@@ -1,5 +1,8 @@
 (setq c-basic-offset 4)
 
+;; do not display a splash screen on startup
+(setq inhibit-splash-screen t)
+
 ;; Add the given path to the load-path variable.
 (defun add-to-load-path (path-string)
   (message (format "Passed %S..." path-string))
@@ -38,7 +41,7 @@
 (require 'ruby-mode)
 (require 'inf-ruby)
 (require 'snippet)
-;;(require 'rails)
+(require 'rails)
 (require 'tomtt)
 (load "color-theme-tomtt")
 
@@ -62,13 +65,7 @@
 (tool-bar-mode 0)
 (menu-bar-mode 1)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(add-hook 'emacs-lisp-mode-hook 'turn-on-font-lock)
-(add-hook 'lisp-mode-hook 'turn-on-font-lock)
-(add-hook 'java-mode-hook 'turn-on-font-lock)
-(add-hook 'php-mode-hook 'turn-on-font-lock)
-(add-hook 'python-mode-hook 'turn-on-font-lock)
-(add-hook 'ruby-mode-hook 'turn-on-font-lock)
-(add-hook 'sh-mode-hook 'turn-on-font-lock)
+(global-font-lock-mode t)
 
 ;; Ruby
 (defun ruby-eval-buffer () (interactive)
@@ -86,5 +83,8 @@
 
 ;; dark bold constructs
 ;(color-theme-renegade)
+
+(require 'psvn)
+(setq svn-status-verbose nil)
 
 (color-theme-tomtt)
