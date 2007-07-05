@@ -116,4 +116,12 @@
 (require 'psvn)
 (setq svn-status-verbose nil)
 
+;; Flymake fonts are set here, because setting them in the color theme does not work for me.
+(custom-set-variables
+)
+(custom-set-faces
+ '(flymake-errline ((((class color)) (:background "DarkRed"))))
+ '(flymake-warnline ((((class color)) (:background "DarkBlue"))))
+ )
+
 (server-start)

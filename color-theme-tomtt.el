@@ -141,6 +141,9 @@
      (sgml-end-tag-face ((t (:foreground "greenyellow"))))
      (sgml-entity-face ((t (:foreground "gold"))))
      (flyspell-incorrect-face ((t (:foreground "OrangeRed" :bold t :underline t))))
-     (flyspell-duplicate-face ((t (:foreground "Gold3" :bold t :underline t)))))))
+     (flyspell-duplicate-face ((t (:foreground "Gold3" :bold t :underline t))))
+     (flymake-errline-face ((((class color)) (:background "DarkRed")))) ;; TtT: flymake seems to not care what I put here
+     (flymake-warnline-face ((((class color)) (:background "DarkBlue")))) ;; TtT: flymake seems to not care what I put here
+)))
 
 (color-theme-tomtt)
