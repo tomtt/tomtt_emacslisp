@@ -43,25 +43,21 @@
         (crs-add-to-load-path (cdr path-string)))))
 
 
-;; Add ~/.emacs.d/ to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacs.d"))
-    (add-to-load-path (expand-file-name "~/.emacs.d")))
+(defun add-to-load-path-if-exists (dir)
+     (if (file-exists-p (expand-file-name dir))
+         (add-to-load-path (expand-file-name dir))))
 
-;; Add ~/.emacslisp/ to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacslisp"))
-    (add-to-load-path (expand-file-name "~/.emacslisp")))
+(add-to-load-path-if-exists "~/.emacs.d")
+(add-to-load-path-if-exists "~/.emacslisp")
+(add-to-load-path-if-exists "~/.emacslisp/python-mode")
+(add-to-load-path-if-exists "~/.emacslisp/rails")
+(add-to-load-path-if-exists "~/.emacslisp/color-theme")
+(add-to-load-path-if-exists "~/.emacslisp/semantic")
+(add-to-load-path-if-exists "~/.emacslisp/eieio")
+(add-to-load-path-if-exists "~/.emacslisp/speedbar")
+(add-to-load-path-if-exists "~/.emacslisp/ecb")
 
-;; Add ~/.emacslisp/python-mode to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacslisp/python-mode"))
-    (add-to-load-path (expand-file-name "~/.emacslisp/python-mode")))
-
-;; Add ~/.emacslisp/rails to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacslisp/rails"))
-    (add-to-load-path (expand-file-name "~/.emacslisp/rails")))
-
-;; Add ~/.emacslisp/color-theme to the load-path if the directory exists
-(if (file-exists-p (expand-file-name "~/.emacslisp/color-theme"))
-    (add-to-load-path (expand-file-name "~/.emacslisp/color-theme")))
+(setq semantic-load-turn-everything-on t)
 
 (require 'php-mode)
 (require 'javascript-mode)
@@ -71,6 +67,11 @@
 (require 'snippet)
 (require 'rails)
 (require 'tomtt)
+(require 'semantic-load)
+(require 'ecb)
+
+(autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
+(autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
 
 (setq c-basic-offset 4)
 
@@ -116,13 +117,12 @@
 (require 'psvn)
 (setq svn-status-verbose nil)
 
-;; Flymake fonts are set here, because setting them in the color theme does not work for me.
 (custom-set-variables
-)
+ '(ecb-options-version "2.32"))
 (custom-set-faces
+ ;; Flymake fonts are set here, because setting them in the color theme does not work for me.
  '(flymake-errline ((((class color)) (:background "DarkRed"))))
- '(flymake-warnline ((((class color)) (:background "DarkBlue"))))
- )
+ '(flymake-warnline ((((class color)) (:background "DarkBlue")))))
 
 ;; Setup for cygwin
 (if win32p
