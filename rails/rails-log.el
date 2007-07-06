@@ -48,6 +48,7 @@
     (start-process "tail"
                    buffer
                    "tail"
+                   "-n 80"
                    "-f" (rails-core:file (concat "log/" log-file)))))
 
 (defun rails-log:open (log-file)
