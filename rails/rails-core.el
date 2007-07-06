@@ -35,12 +35,13 @@
     "app/helpers"
     "test/unit"
     "test/functional"
+    "test/integration"
     "test/fixtures")
   "Directories with Rails classes")
 
 (defun rails-core:class-by-file (filename)
   "Return the class associated with FILENAME.
-   <rails-root>/(app/models|app/controllers|app/helpers|test/unit|test/functional)/foo/bar_baz
+   <rails-root>/(app/models|app/controllers|app/helpers|test/unit|test/functional|test/integration)/foo/bar_baz
                 --> Foo::BarBaz"
   (let* ((case-fold-search nil)
          (path (replace-regexp-in-string
@@ -230,6 +231,11 @@ CONTROLLER."
     (format "test/functional/%s_test.rb"
             (rails-core:file-by-class (rails-core:long-controller-name controller) t))))
 
+(defun rails-core:integration-test-file (integration-name)
+  "Return the integration test file with the specified name"
+  (when integration-name
+    (format "test/integration/%s_test.rb" integration-name)))
+
 (defun rails-core:unit-test-file (model)
   "Return the unit test file name for the model named MODEL."
   (when model
@@ -315,6 +321,13 @@ suffix if CUT-CONTOLLER-SUFFIX is non nil."
                        "ControllerTest"))
    (find-recursive-files "\\.rb$" (rails-core:file "test/functional/"))))
 
+(defun rails-core:integration-tests ()
+  "Return a list of Rails integration tests."
+  (mapcar
+   #'(lambda(it)
+       (replace-regexp-in-string "_test.rb" "" it))
+   (find-recursive-files "\\.rb$" (rails-core:file "test/integration/"))))
+
 (defun rails-core:models ()
   "Return a list of Rails models."
   (mapcar
@@ -325,7 +338,7 @@ suffix if CUT-CONTOLLER-SUFFIX is non nil."
     (find-recursive-files "\\.rb$" (rails-core:file "app/models/")))))
 
 (defun rails-core:unit-tests ()
-  "Return a list of Rails functional tests."
+  "Return a list of Rails unit tests."
   (mapcar
    #'(lambda(it)
        (remove-postfix (rails-core:class-by-file it)

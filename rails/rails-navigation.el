@@ -87,6 +87,14 @@
    "Go to functional test."
    'rails-core:functional-test-file))
 
+(defun rails-nav:goto-integration-tests ()
+  "Go to integration tests."
+  (interactive)
+  (rails-nav:goto-file-with-menu-from-list
+   (rails-core:integration-tests)
+   "Go to integration test."
+   'rails-core:integration-test-file))
+
 (defun rails-nav:goto-unit-tests ()
   "Go to functional tests."
   (interactive)

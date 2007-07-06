@@ -79,6 +79,7 @@
       ([goto-observers]   '("Go to Observers"        . rails-nav:goto-observers))
       ([goto-unit-tests]  '("Go to Unit Tests"       . rails-nav:goto-unit-tests))
       ([goto-func-tests]  '("Go to Functional Tests" . rails-nav:goto-functional-tests))
+      ([goto-intg-tests]  '("Go to Integration Tests" . rails-nav:goto-integration-tests))
       ([goto-models]      '("Go to Models"           . rails-nav:goto-models))
       ([goto-controllers] '("Go to Controllers"      . rails-nav:goto-controllers)))
     map))
@@ -225,6 +226,7 @@
   ((rails-key "\C-c g p") 'rails-nav:goto-plugins)
   ((rails-key "\C-c g x") 'rails-nav:goto-fixtures)
   ((rails-key "\C-c g f") 'rails-nav:goto-functional-tests)
+  ((rails-key "\C-c g i") 'rails-nav:goto-integration-tests)
   ((rails-key "\C-c g u") 'rails-nav:goto-unit-tests)
 
   ;; Switch

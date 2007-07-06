@@ -72,6 +72,7 @@
 
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
+(setq ecb-tip-of-the-day nil)
 
 (setq c-basic-offset 4)
 
