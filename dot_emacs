@@ -124,4 +124,29 @@
  '(flymake-warnline ((((class color)) (:background "DarkBlue"))))
  )
 
+;; Setup for cygwin
+(if win32p
+    (progn
+      (require 'cygwin-mount)
+      (cygwin-mount-activate)
+      ;; This assumes that Cygwin is installed in C:\cygwin (the
+      ;; default) and that C:\cygwin\bin is not already in your
+      ;; Windows Path (it generally should not be).
+      ;;
+      (setq exec-path (cons "C:/tomtt/cygwin/bin" exec-path))
+      ;;
+      ;; NT-emacs assumes a Windows command shell, which you change
+      ;; here.
+      ;;
+      (setq process-coding-system-alist '(("bash" . undecided-unix)))
+      (setq shell-file-name "bash")
+      (setenv "SHELL" shell-file-name)
+      (setq explicit-shell-file-name shell-file-name)
+      ;;
+      ;; This removes unsightly ^M characters that would otherwise
+      ;; appear in the output of java applications.
+      ;;
+      (add-hook 'comint-output-filter-functions
+                'comint-strip-ctrl-m)))
+
 (server-start)
