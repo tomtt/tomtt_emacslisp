@@ -1,7 +1,7 @@
 ;; my personal preferences
 (partial-completion-mode t)
 
-(snippet-with-abbrev-table 'text-mode-abbrev-table
+(snippet-with-abbrev-table 'html-mode-abbrev-table
   ("ehtml" .  "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Strict//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">
 <html lang=\"en\">
   <head>
@@ -47,4 +47,10 @@ end"))
 ;(setq gnuserv-frame (selected-frame))
 ;(setenv "GNUSERV_SHOW_EMACS" "1")
 
+(fset 'insert-selection-as-color
+   [?\C-y ?\C-  M-left left ?\C-x ?r ?s ?c ?\C-w M-left M-right ?\C-k ?\C-  M-left ?\C-x ?r ?s ?n ?\C-w ?\C-x ?r ?i ?c M-right ?\; ?  ?\C-c ?\C-c ?\C-x ?r ?i ?n ?\C-e left return])
+(define-key cssm-mode-map "\C-c \C-i" 'insert-selection-as-color)
+(define-key cssm-mode-map "\C-c \C-l" 'list-colors-display)
+
 (provide 'tomtt)
+

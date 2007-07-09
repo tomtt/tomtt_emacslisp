@@ -70,6 +70,11 @@
 (require 'semantic-load)
 (require 'ecb)
 
+(autoload 'css-mode "css-mode")
+(setq auto-mode-alist
+     (cons '("\\.css\\'" . css-mode) auto-mode-alist))
+(setq cssm-indent-function #'cssm-c-style-indenter)
+
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
 (setq ecb-tip-of-the-day nil)
@@ -124,6 +129,8 @@
  ;; Flymake fonts are set here, because setting them in the color theme does not work for me.
  '(flymake-errline ((((class color)) (:background "DarkRed"))))
  '(flymake-warnline ((((class color)) (:background "DarkBlue")))))
+
+(global-set-key "\C-c e" 'ecb-activate)
 
 ;; Setup for cygwin
 (if win32p
