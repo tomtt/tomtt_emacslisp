@@ -66,11 +66,11 @@
 (require 'inf-ruby)
 (require 'snippet)
 (require 'rails)
-(require 'tomtt)
 (require 'semantic-load)
 (require 'ecb)
+(require 'css-mode)
+(require 'tomtt)
 
-(autoload 'css-mode "css-mode")
 (setq auto-mode-alist
      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
 (setq cssm-indent-function #'cssm-c-style-indenter)
@@ -96,6 +96,7 @@
 (add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rjs\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.dryml\\'" . ruby-mode))
 
 (tool-bar-mode 0)
 (menu-bar-mode 1)
