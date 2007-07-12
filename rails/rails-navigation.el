@@ -223,7 +223,7 @@ Rules for actions/controllers:
      (unless
          (when-bind
           (line (save-excursion
-                  (if (rails-core:rhtml-buffer-p)
+                  (if (rails-core:view-buffer-p)
                       (rails-core:erb-block-string)
                     (current-line-string))))
           (loop for func in rails-on-current-line-gotos

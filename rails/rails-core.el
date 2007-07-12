@@ -645,4 +645,12 @@ the Rails minor mode log."
   "Return non nil if the current buffer is rhtml file."
   (string-match "\\.rhtml$" (buffer-file-name)))
 
+(defun rails-core:dryml-buffer-p ()
+  "Return non nil if the current buffer is dryml file."
+  (string-match "\\.dryml$" (buffer-file-name)))
+
+(defun rails-core:view-buffer-p ()
+  "Return non nil if the current buffer is a view file."
+  (or (rails-core:rhtml-buffer-p) (rails-core:dryml-buffer-p)))
+
 (provide 'rails-core)
