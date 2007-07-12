@@ -26,7 +26,7 @@
 
 (require 'snippet)
 
-(defconst rails-snippets-feature:list
+(setq rails-snippets-feature:list
   '((0 "ruby")
     (1 "loops" ruby-mode-abbrev-table
        ("while" "while $${condition}\n$>$.\nend$>" "while ... end")
@@ -39,6 +39,7 @@
        ("forin" "for $${element} in $${collection}\n$>$${element}.$.\nend$>" "for ... in ... end")
        ("dow" "downto($${0}) { |$${n}|$. }" "downto(0) { |n| ... }")) ; loops
     (1 "general" ruby-mode-abbrev-table
+       ("hdoc" "<<EOT\n$.\nEOT" "here document")
        ("ha" "{ $>:$. }" "{ :key => 'value' }")
        (":"  ":$${key} => '$${value}'" ":key => 'value'")
        ("yl" "File.open($${yaml}) { |$${file}| YAML.load($${file}) }" "YAML.load(file)")
@@ -137,6 +138,7 @@
        ("any" "any? { |$${e}| $. }" "any? { |e| ... }")
        ("all" "all? { |$${e}| $. }" "all? { |e| ... }")) ; collections
     (0 "erb" html-mode-abbrev-table html-helper-mode-abbrev-table nxml-mode-abbrev-table
+       ("dmdt" "<def tag=\"$${tagname}\">\n$>$.\n</def>" "def tag")
        ("title" "<title>$${title}</title>" "title")
        ("textarea" "<textarea name=\"$${Name}\" rows=\"$${8}\" cols=\"$${40}\">$.</textarea>" "textarea")
        ("table" "<table border=\"$${0}\" $${cellpadding}>\n$><tr><th>$${Header}</th></tr>\n$><tr><td>$${Data}</td></tr>\n</table>" "table")
@@ -253,11 +255,11 @@
        ("ct" "create_table :$${,rails-snippets-feature:migration-table-name} do |t|\n$>tcls$.\nend$>" "create_table")
        ("ret" "rename_table :$${,rails-snippets-feature:migration-table-name}, :$${new_name}$." "rename table")) ; migrations
     (0 "environment" ruby-mode-abbrev-table
-       ("logd" "logger.debug '$${message}'$." "logger.debug")
-       ("loge" "logger.error '$${message}'$." "logger.error")
-       ("logf" "logger.fatal '$${message}'$." "logger.fatal")
-       ("logi" "logger.info '$${message}'$." "logger.info")
-       ("logw" "logger.warn '$${message}'$." "logger.warn")
+       ("logd" "logger.debug \"$${message}\"$." "logger.debug")
+       ("loge" "logger.error \"$${message}\"$." "logger.error")
+       ("logf" "logger.fatal \"$${message}\"$." "logger.fatal")
+       ("logi" "logger.info \"$${message}\"$." "logger.info")
+       ("logw" "logger.warn \"$${message}\"$." "logger.warn")
        ("par" "params[:$${id}]" "params[...]")
        ("session" "session[:$${User}]" "session[...]")
        ("flash" "flash[:$${notice}] = '$${Successfully}'$." "flash[...]")) ; environment
@@ -287,6 +289,7 @@
        ("assd" "assert_send [$${object}, :$${message}, $${args}]" "assert_send(...)")
        ("ast" "assert_throws :$${expected} { $. }" "assert_throws(...) { ... }")
        ("astm" "assert_template '$${index}'" "assert_template"))))
+;; TtT just here for easy on-the-fly install (rails-snippets-feature:install)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
