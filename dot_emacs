@@ -69,12 +69,13 @@
 (require 'semantic-load)
 (require 'ecb)
 (require 'css-mode)
+(require 'anything)
 (require 'tomtt)
 
 (setq auto-mode-alist
      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
 (setq cssm-indent-function #'cssm-c-style-indenter)
-
+(global-set-key "\C-f" 'anything)
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
 (setq ecb-tip-of-the-day nil)
