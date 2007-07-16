@@ -649,8 +649,12 @@ the Rails minor mode log."
   "Return non nil if the current buffer is dryml file."
   (string-match "\\.dryml$" (buffer-file-name)))
 
+(defun rails-core:haml-buffer-p ()
+  "Return non nil if the current buffer is haml file."
+  (string-match "\\.haml$" (buffer-file-name)))
+
 (defun rails-core:view-buffer-p ()
   "Return non nil if the current buffer is a view file."
-  (or (rails-core:rhtml-buffer-p) (rails-core:dryml-buffer-p)))
+  (or (rails-core:rhtml-buffer-p) (rails-core:dryml-buffer-p) (rails-core:haml-buffer-p)))
 
 (provide 'rails-core)

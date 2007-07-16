@@ -70,6 +70,8 @@
 (require 'ecb)
 (require 'css-mode)
 (require 'anything)
+(require 'haml-mode)
+(require 'sass-mode)
 (require 'tomtt)
 
 (setq auto-mode-alist
