@@ -56,6 +56,9 @@
 (add-to-load-path-if-exists "~/.emacslisp/eieio")
 (add-to-load-path-if-exists "~/.emacslisp/speedbar")
 (add-to-load-path-if-exists "~/.emacslisp/ecb")
+(add-to-load-path-if-exists "~/.emacslisp/muse")
+(add-to-load-path-if-exists "~/.emacslisp/planner")
+(add-to-load-path-if-exists "~/.emacslisp/remember")
 
 (setq semantic-load-turn-everything-on t)
 
@@ -72,6 +75,16 @@
 (require 'anything)
 (require 'haml-mode)
 (require 'sass-mode)
+
+(require 'muse-mode)     ; load authoring mode
+(require 'muse-html)     ; load publishing styles I use
+(require 'muse-latex)
+(require 'muse-texinfo)
+(require 'muse-docbook)
+(require 'muse-project)  ; publish files in projects
+
+(require 'planner)
+(require 'remember)
 (require 'tomtt)
 
 (setq auto-mode-alist
