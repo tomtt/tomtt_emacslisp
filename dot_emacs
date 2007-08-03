@@ -61,6 +61,7 @@
 (add-to-load-path-if-exists "~/.emacslisp/remember")
 
 (setq semantic-load-turn-everything-on t)
+(setq planner-directory "~/created/plans")
 
 (require 'php-mode)
 (require 'javascript-mode)
@@ -84,8 +85,32 @@
 (require 'muse-project)  ; publish files in projects
 
 (require 'planner)
+(require 'planner-registry)
+(planner-registry-initialize)
+
 (require 'remember)
 (require 'tomtt)
+
+(setq planner-project "tomtt_planner")
+(setq muse-project-alist
+           '(("tomtt_planner"
+              ("~/created/productivity/plans"           ;; where your Planner pages are located
+               :default "TaskPool" ;; use value of `planner-default-page'
+               :major-mode planner-mode
+               :visit-link planner-visit-link)
+
+              ;; This next part is for specifying where Planner pages
+              ;; should be published and what Muse publishing style to
+              ;; use.  In this example, we will use the XHTML publishing
+              ;; style.
+
+              (:base "planner-xhtml"
+                     ;; where files are published to
+                     ;; (the value of `planner-publishing-directory', if
+                     ;;  you have a configuration for an older version
+                     ;;  of Planner)
+                     :path "~/public_html/plans"))))
+(global-set-key (kbd "<f9> t") 'planner-create-task-from-buffer)
 
 (setq auto-mode-alist
      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
