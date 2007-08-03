@@ -112,6 +112,10 @@
                      :path "~/public_html/plans"))))
 (global-set-key (kbd "<f9> t") 'planner-create-task-from-buffer)
 
+(require 'remember-planner)
+(setq remember-handler-functions '(remember-planner-append))
+(setq remember-annotation-functions planner-annotation-functions)
+
 (setq auto-mode-alist
      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
 (setq cssm-indent-function #'cssm-c-style-indenter)
@@ -200,3 +204,4 @@
                 'comint-strip-ctrl-m)))
 
 (server-start)
+(plan)
