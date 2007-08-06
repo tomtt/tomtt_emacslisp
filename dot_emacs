@@ -55,13 +55,14 @@
 (add-to-load-path-if-exists "~/.emacslisp/semantic")
 (add-to-load-path-if-exists "~/.emacslisp/eieio")
 (add-to-load-path-if-exists "~/.emacslisp/speedbar")
+(add-to-load-path-if-exists "~/.emacslisp/w3m")
+(add-to-load-path-if-exists "~/.emacslisp/vm")
 (add-to-load-path-if-exists "~/.emacslisp/ecb")
 (add-to-load-path-if-exists "~/.emacslisp/muse")
 (add-to-load-path-if-exists "~/.emacslisp/planner")
 (add-to-load-path-if-exists "~/.emacslisp/remember")
 
 (setq semantic-load-turn-everything-on t)
-(setq planner-directory "~/created/plans")
 
 (require 'php-mode)
 (require 'javascript-mode)
@@ -71,6 +72,10 @@
 (require 'snippet)
 (require 'rails)
 (require 'semantic-load)
+(require 'w3m-util)
+(require 'w3m)
+;;(load "mail")
+
 (require 'ecb)
 (require 'css-mode)
 (require 'anything)
@@ -84,37 +89,10 @@
 (require 'muse-docbook)
 (require 'muse-project)  ; publish files in projects
 
-(require 'planner)
-(require 'planner-registry)
-(planner-registry-initialize)
-
+(load "tomtt-planner")
 (require 'remember)
 (require 'tomtt)
 
-(setq planner-project "tomtt_planner")
-(setq muse-project-alist
-           '(("tomtt_planner"
-              ("~/created/productivity/plans"           ;; where your Planner pages are located
-               :default "TaskPool" ;; use value of `planner-default-page'
-               :major-mode planner-mode
-               :visit-link planner-visit-link)
-
-              ;; This next part is for specifying where Planner pages
-              ;; should be published and what Muse publishing style to
-              ;; use.  In this example, we will use the XHTML publishing
-              ;; style.
-
-              (:base "planner-xhtml"
-                     ;; where files are published to
-                     ;; (the value of `planner-publishing-directory', if
-                     ;;  you have a configuration for an older version
-                     ;;  of Planner)
-                     :path "~/public_html/plans"))))
-(global-set-key (kbd "<f9> t") 'planner-create-task-from-buffer)
-
-(require 'remember-planner)
-(setq remember-handler-functions '(remember-planner-append))
-(setq remember-annotation-functions planner-annotation-functions)
 
 (setq auto-mode-alist
      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
@@ -142,6 +120,7 @@
 (add-to-list 'auto-mode-alist '("\\.rjs\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.dryml\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\dot_emacs\\'" . emacs-lisp-mode))
 
 (tool-bar-mode 0)
 (menu-bar-mode 1)
@@ -205,3 +184,4 @@
 
 (server-start)
 (plan)
+(delete-other-windows)
