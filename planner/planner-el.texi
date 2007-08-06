@@ -251,7 +251,7 @@ Sample Configuration Files
 @chapter Preface
 
 This document describes Planner, which was written by John Wiegley and
-is now maintained by Michael Olson (@pxref{Acknowledgements}).
+is now maintained by John Sullivan (@pxref{Acknowledgements}).
 
 This document is a work in progress, and your contribution will be
 greatly appreciated. Please e-mail comments and suggestions to the
@@ -259,11 +259,10 @@ mailing list (@pxref{Getting Help}). In the subject line of your
 e-mail, include the word @samp{Planner}.
 
 This documentation is available in eye-pleasing formats including PDF
-and HTML at @url{http://www.mwolson.org/static/doc/}.
+and HTML at @url{http://wjsullivan.net/static/doc/planner/}.
 
-Documentation author: John Sullivan @email{john@@wjsullivan.net}
-
-Maintainer: Michael Olson @email{mwolson@@gnu.org}
+Documentation author and maintainer: John Sullivan
+@email{john@@wjsullivan.net}
 
 @*
 John Sullivan (johnsu01)@*
@@ -311,7 +310,10 @@ also the packages it depends on (@pxref{Installation}).
 
 Planner depends on Muse. Information for downloading and installing
 Muse can be found at
-@url{http://www.mwolson.org/static/doc/muse.html}.
+@url{http://mwolson.org/static/doc/muse.html}.
+
+Planner and Muse are intended to work with version 21 or later of Emacs
+and XEmacs.
 
 Make sure that you use the latest Muse release.  Development code might
 prove unstable.
@@ -343,15 +345,29 @@ install it from a source archive, Arch repository, or Debian package.
 
 You can install Planner from the source archive packaged and
 distributed directly by the maintainer. This archive is provided in
-both @file{.tar.gz} and @file{.zip} format.
+both @file{.tar.gz} and @file{.zip} format.  If you don't know where to
+extract these archives, create a @file{~/elisp} directory, and extract
+them there.
 
 @enumerate
 @item
 Download and unpack either
-@url{http://www.mwolson.org/static/dist/planner-latest.tar.gz} or
-@url{http://www.mwolson.org/static/dist/planner-latest.zip}.
+@url{http://mwolson.org/static/dist/planner-latest.tar.gz} or
+@url{http://mwolson.org/static/dist/planner-latest.zip}.
+
+@item
+Likewise for
+@url{http://mwolson.org/static/dist/muse-latest.tar.gz} or
+@url{http://mwolson.org/static/dist/muse-latest.zip}.
+
+@item
+Likewise for
+@url{http://mwolson.org/static/dist/remember-latest.tar.gz} or
+@url{http://mwolson.org/static/dist/remember-latest.zip}.
 
 @item Edit your @file{~/.emacs} (@file{_emacs} on Microsoft Windows).
+
+Replace @file{/path/to} with wherever you extracted the files.
 
 @example
 ;; Add the directories to your load path
@@ -364,11 +380,12 @@ Download and unpack either
 @end example
 @end enumerate
 
-@subsubsection Updating Your Version
+@subheading Updating Your Version
 
 Download a new version and extract it over the old directory. Don't
 forget to delete any byte-compiled files (@file{*.elc}) in the
-directories so that the new code will be used.
+directories (which can be accomplished by running ``make clean'') so
+that the new code will be used.
 
 @node Installing from Arch, Installing from Debian, Installing from a Source Archive, Getting the Files
 @comment node-name,  next,  previous,  up
@@ -387,16 +404,23 @@ files.
 
 @example
 # Register the Muse archive
-tla register-archive http://www.mwolson.org/archives/2006
+tla register-archive -f http://mwolson.org/archives/2006
 
 # Register the Planner archive
-tla register-archive http://arch.gna.org/planner-el/archive-2006
+tla register-archive -f http://arch.gna.org/planner-el/archive-2006
 
-# Get the Muse archive
+# Register the Remember archive
+tla register-archive -f http://arch.gna.org/remember-el/archive
+
+# Get Muse
 tla get mwolson@@gnu.org--2006/muse--main--1.0 muse
 
 # Download planner module into the planner/ subdirectory
-tla get mwolson@@gnu.org--2006-planner-el/planner-el--devel--1.0 planner
+tla get mwolson@@gnu.org--2006-planner-el/planner-el--devel--0 planner
+
+# Get Remember
+tla get remember-el@@arch.gna.org/remember--main--0 remember
+
 @end example
 
 Then add the following lines to your @code{~/.emacs}:
@@ -411,10 +435,10 @@ Then add the following lines to your @code{~/.emacs}:
 (require 'planner)
 @end example
 
-You can also browse the Arch repository on the web at
-@url{http://www.mwolson.org/cgi-bin/archzoom/archzoom.cgi/mwolson@@gnu.org--2006/planner}.
+You can also browse Planner's Arch repository on the web at
+@url{http://archzoom.mwolson.org/cgi-bin/archzoom.cgi/mwolson@@gnu.org--2006-planner-el}.
 
-@subsubsection Updating Your Version
+@subheading Updating Your Version
 @cindex Arch, updating from
 
 To stay up-to-date using Arch, here are some commands that might be
@@ -433,9 +457,9 @@ tla missing --summary
 To update to the latest version:
 
 @example
-cd muse; tla replay
-cd ../planner; tla replay
-cd ../remember; tla replay
+cd muse; tla update
+cd ../planner; tla update
+cd ../remember; tla update
 @end example
 
 Don't forget to delete any byte-compiled files (@file{*.elc}) in the
@@ -454,7 +478,7 @@ If you wish to try experimental packages, add the following lines to
 your @file{/etc/apt/sources.list}
 
 @example
-deb http://www.mwolson.org/debian/ ./
+deb http://mwolson.org/debian/ ./
 @end example
 
 Then, do the following steps as root:
@@ -463,9 +487,18 @@ Then, do the following steps as root:
 apt-get update
 apt-get install muse-el
 apt-get install planner-el
+apt-get install remember-el
 @end example
 
-@subsubsection Updating Your Version
+If you get some warning about the key not being trusted, you can either
+ignore it or do the following.
+
+@example
+gpg --keyserver pgpkeys.mit.edu --recv-key f3a8d319
+gpg -a --export f3a8d319 | sudo apt-key add -
+@end example
+
+@subheading Updating Your Version
 @cindex Debian package, updating
 
 If you installed Planner from Debian, do @kbd{apt-get update; apt-get
@@ -526,8 +559,9 @@ source files for your planner will reside. This is the directory where
 you will actually visit files and edit them.  These files must have a
 ``.muse'' extension.
 
-The second directory (@file{~/public_html/Plans}) is the directory where
-your planner files will be published by Muse as XHTML.
+The second directory (@file{~/public_html/Plans}) is the directory
+where your planner files will be published by Muse as XHTML
+(@pxref{Publishing}).
 
 After you have added this code, make sure to either evaluate it or
 restart Emacs.
@@ -582,15 +616,6 @@ are two additional steps you can take to make using it easier and more
 efficient. These steps are optional.
 
 @itemize
-
-@cindex @file{remember.el}
-@cindex @file{remember-planner.el}
-@item You can install @file{remember.el} and @file{remember-planner.el}
-so that you can create Planner notes from anywhere. See the
-documentation at
-@uref{http://sacha.free.net.ph/notebook/doc/dev/remember/} for more
-information.
-
 @cindex installing the info file
 @cindex @file{planner-el.texi}, installing
 @cindex @file{planner-el.info}, installing
@@ -612,10 +637,10 @@ for the new entry in the info @file{dir} file.
 @item You can byte-compile @file{planner.el}, @file{Muse},
 @file{remember.el}, or any of the optional modules you frequently use,
 in order to improve the speed of their execution. Basically, all you
-need to do is change to the directory of each project and run
-@command{make} from the command line. To read more detail about byte
-compilation, see @ref{Byte Compilation, , ,elisp, Emacs Lisp Reference
-Manual}.
+need to do is change to the directory of each project in
+@file{scripts/planner-build.el} and run @command{make} from the command
+line. To read more detail about byte compilation, see
+@ref{Byte Compilation, , ,elisp, Emacs Lisp Reference Manual}.
 
 @end itemize
 
@@ -675,10 +700,10 @@ check out @ref{Sample Configuration Files}.
 @section Planning Based on the Franklin-Covey Approach
 @cindex philosophy of planning
 
-This is a slightly edited and updated version of an essay by John
+(This is an edited and updated version of an essay originally by John
 Wiegley. Read it if you want to get some insights into one way of
-planning. You can skip this if you want to go straight to planning
-your day.
+planning. You can skip this if you want to go straight to planning your
+day.)
 
 What is planning?  It can be a nebulous thing to define.  In its
 essence, however, it is very simple: it's how we achieve our dreams.
@@ -724,7 +749,7 @@ your plan is merely a well-crafted wish.
 
 Fifth is just to do the work, and be patient.  All good plans take a
 great deal of time, and *cannot* happen immediately.  The groundwork
-must be laid for each step, or else it will rest on an unsecure
+must be laid for each step, or else it will rest on an insecure
 foundation.  If you follow your plan doggedly, applying some time to
 it each day or week, it @emph{will} happen.  Remember the story of the
 tortoise and the hare.  I've even written a short essay on the
@@ -736,11 +761,7 @@ information, since they allow you to change things without erasing
 or rewriting.  And since all plans change quite a bit during their
 implementation, a planning program can be very helpful.
 
-Start by adding the following to your @file{.emacs} (or @file{_emacs}):
-
-@example
-(load "planner")
-@end example
+Start by installing Planner and Muse (@pxref{Installation}).
 
 Now, conceive your idea.  I can't believe there's nothing you want
 from life.  More peace, time to enjoy the world, an end to war?
@@ -748,10 +769,10 @@ Everyone wants something.  Search deeply, and you will find
 countless unhoped wishes lurking therein.  Choose one for now, and
 think on it for a while.
 
-Then open a file (using @kbd{C-x C-f}) within the directory named by
-@code{planner-directory}.  Emacs will automatically recognize this file
-as a planner file.  Name the file after your plan, such as
-@file{BetterHealth}.
+Then open a file (using @kbd{C-x C-f}) within the directory you named in
+your @code{muse-project-alist}. Make sure the file has a @file{.muse}
+extension so that Emacs will automatically recognize it as a planner
+file. Name the file after your plan, such as @file{BetterHealth.muse}.
 
 Choose an idea you really want to accomplish.  Struggle to
 differentiate between the things you want because others want them,
@@ -807,13 +828,20 @@ important, because they let you know you're making progress.  I
 recommend having a big party with friends every time you achieve a
 milestone.  A typical plan might have between three and ten.
 
-Between the milestones are the bigger pieces of your plan.  Name
-these pieces using MixedCase words, and you'll notice that Emacs
-colors and underlines them for you.  Like, FindGoodGym.  Hit return
-on this highlighted word, and you'll find yourself in another,
-blank file.  In this file, start drafting your sub-plan, just as
-you did with the larger plan.  You should find it easier now, since
-the scope is smaller.
+Between the milestones are the bigger pieces of your plan. You might
+find it convenient to name these pieces using MixedCase words. Try
+adding these lines to your @file{.emacs} or @file{_emacs} file.
+
+@example
+(require 'muse-wiki)
+(setq muse-wiki-allow-nonexistent-wikiword t)
+@end example
+
+You'll notice that Emacs colors and underlines them for you. Like,
+FindGoodGym. Hit return on this highlighted word, and you'll find
+yourself in another, blank file. In this file, start drafting your
+sub-plan, just as you did with the larger plan. You should find it
+easier now, since the scope is smaller.
 
 As you break down further, you'll notice simple little things that
 need to get done.  These are your tasks.  Every plan is a
@@ -879,12 +907,12 @@ jump you to this page from anywhere:
 @end example
 
 As you look at your task sheet each day, the first thing to do is to
-``clock in'' to one of them.  This isn't necessary, and is only
-helpful if you're around your computer a lot.  But by typing @kbd{C-c
-C-i} (assuming you have my @file{timeclock.el} on your load-path), it
-will log the time you spend working on your sub-plan (@pxref{Time
-Intervals, , , Emacs, GNU Emacs Manual}).  This is helpful for viewing
-your progress.  Type @kbd{C-c C-o} to clock out.
+``clock in'' to one of them. This isn't necessary, and is only helpful
+if you're around your computer a lot. But by typing @kbd{C-c C-i}
+(assuming you have @file{timeclock.el} on your load-path), it will log
+the time you spend working on your sub-plan (@pxref{Time Intervals, , ,
+Emacs, GNU Emacs Manual}). This is helpful for viewing your progress.
+Type @kbd{C-c C-o} to clock out.
 
 @kbd{C-M-p} and @kbd{C-M-n} will move a task up and down in priority.
 Priority is represented by a letter A through C.  'A' tasks mean they
@@ -1205,8 +1233,9 @@ the task and call @kbd{M-x planner-update-task}
 Reschedule many tasks: Mark a region and use @kbd{M-x
 planner-copy-or-move-region}
 @item
-Change the plan of a task: @kbd{M-x planner-replan-task}, or @kbd{C-c
-C-c} (@code{planner-copy-or-move-task}) with a plan page
+Change the plan of a task: @kbd{M-x planner-replan-task}, or do
+@kbd{C-c C-c} (@code{planner-copy-or-move-task}) and type in a
+plan page rather than a date
 @item Delete a task: @kbd{M-x planner-delete-task}
 @item
 Reorder tasks: @key{M-p} (@code{planner-raise-task}) and @key{M-n}
@@ -1242,24 +1271,33 @@ different activities.
 @node Notes, Hyperlinks, Schedule, Getting Started
 @comment  node-name,  next,  previous,  up
 @section Notes
+@cindex @file{remember.el}
+@cindex @file{remember-planner.el}
+@cindex notes
 
-You can put anything you want in this section, or remove it from your
+By default, your Planner pages will have a Notes section. You can put
+anything you want in this section, or remove it from your
 @code{planner-day-page-template} entirely.
 
 You may be interested in @file{remember-planner.el}, part of the
-Remember package. @code{remember-planner.el} makes it easy to create
-notes from anywhere in Emacs, and it uses the same hyperlink-sensing
-code that Planner uses. Notes added by remember-planner.el look like
-this:
+Remember package (see @inforef{Top, remember-el, remember-el}). You
+can download Remember at @uref{http://gna.org/projects/remember-el/}).
+
+@code{remember-planner.el} makes it easy to create notes from anywhere
+in Emacs, and it uses the same context-sensing code that Planner uses.
+Notes added by @code{remember-planner.el} look like this:
 
 @example
 .#1 Headline 00:00
 Body
+
+[[context hyperlink]]
 @end example
 
 and are outlined at the H2 level in published HTML.
 
-If you include the following in your @file{~/.emacs}:
+You can easily create context-aware notes if you include the following
+in your @file{~/.emacs}:
 
 @example
 (require 'remember-planner)
@@ -1267,26 +1305,29 @@ If you include the following in your @file{~/.emacs}:
 (setq remember-annotation-functions planner-annotation-functions)
 @end example
 
-you can easily create context-aware notes. @kbd{M-x remember} will
-create a dedicated buffer for you to fill in your note. If Planner
-recognizes the buffer as one with context then it will include a
-hyperlink at the bottom. The first line is used as a title, so make it
-short and meaningful. The rest of the text will be used as the body of
-the note. Try it now by creating a note, perhaps about things you'd
-like to remember from this tutorial.
+Then @kbd{M-x remember} will open a dedicated buffer for you to write
+your note. If Planner recognizes your current buffer as one with
+context then it will include a hyperlink at the bottom of the note.
+The first line of the note is used as a title, so make it short and
+meaningful. The rest of the text will be used as the body. Try it now
+by creating a note, perhaps about things you'd like to remember from
+this tutorial.
 
 Typing @kbd{C-c C-c} after composing will prompt for a plan page to
-put this on, with auto-completion. By default, notes will go on
-today's page only. If you specify a plan page, the note will go on
-today's page and on the plan page. Let's try specifying
-@samp{TaskPool} for the note.
+put the note on, with auto-completion. If you don't enter a page, the
+note will just be saved on today's page. If you do specify a plan
+page, the note will go on both today's page and on the specified page.
+Let's try specifying @samp{TaskPool} for the note.
 
 If you look at today's page, you'll find a timestamped note that links
 to @samp{TaskPool}. Likewise, @samp{TaskPool} contains a note that
-links to today's page. Because the text is copied, changes in one will
-not be automatically reflected in the other. To update the linked page
-after editing a note, use @kbd{M-x planner-update-note}. To change the
-plan page of a note, use @kbd{planner-replan-note}.
+links to today's page. To change the plan page of a note, use
+@kbd{planner-replan-note}.
+
+If you decide to edit the note on one of these pages after it has been
+saved, be aware that your changes will not be automatically reflected
+on the linked page. To update the linked page after editing a note,
+use @kbd{M-x planner-update-note}.
 
 @node Hyperlinks, Example Page, Notes, Getting Started
 @section Hyperlinks
@@ -1315,6 +1356,13 @@ the link display name.
 
 You can then paste it into any Planner buffer by using @kbd{M-x yank}
 or the keyboard shortcut.
+
+Alternatively, you can create hyperlinks by typing them directly, using
+the syntax defined by Muse. Anything inside double square brackets will
+be treated as a link. For example, if you type @samp{[[GroceryList]]} in
+a Planner buffer, you will end up with a link to a page called
+@samp{GroceryList}. @inforef{Implicit Links, Bare URLs WikiNames and
+InterWiki links, muse}, for more information about Muse syntax.
 
 Hyperlinks are a powerful feature of Planner. You can use them to
 hyperlink to mail, news, Web pages, and even IRC connections. See the
@@ -1672,8 +1720,8 @@ You don't have to use @command{planner-create-task-from-buffer} to
 create tasks. You can also create new tasks manually by typing them
 directly on your day or project page in the format Planner expects. You
 can even still create hyperlinks by using Muse formatting as you
-manually type the new task. Keep in mind also that tasks do not have to
-be linked to any other page.
+manually type the new task (@pxref{Hyperlinks}). Keep in mind also that
+tasks do not have to be linked to any other page.
 
 For convenience, @command{planner-create-task-from-buffer} is bound to
 @kbd{C-c C-t} in Planner buffers.  You can bind
@@ -1932,9 +1980,11 @@ Another way to have a task not be connected to a particular date is to
 do @kbd{C-c C-c} (@code{planner-copy-or-move-task}) and specify
 @samp{nil} when asked for the date.
 
-If you would like to see a list of all of your unfinished tasks, do
-@kbd{M-x planner-list-unfinished-tasks}. This function only checks
-day plan pages, not project pages.
+If you would like to see a list of all of your unfinished scheduled
+tasks, do @kbd{M-x planner-list-unfinished-tasks}.  It is only intended
+to give you an overview.  Any editing you want to do, like marking tasks
+complete or editing their description, still needs to be done on one of
+the tasks' ``real'' planner pages.
 
 @node Deadlines,  , Task Detail, Creating New Tasks
 @comment  node-name,  next,  previous,  up
@@ -2075,7 +2125,7 @@ complete a task, see the section in
 @comment  node-name,  next,  previous,  up
 @subsubsection Associating Tasks with Multiple Projects
 @cindex multiple projects
-@cindex planner-multi.el, using
+@cindex @file{planner-multi.el}, using
 
 You can use @file{planner-multi.el} to associate a task with more than
 one project. That way, you can easily keep GTD-style context lists as
@@ -2921,7 +2971,7 @@ Warning: this function can be slow, as it checks all the day pages!
 @node planner-registry, planner-zoom ,<tasks> tag, Task Reports and Overviews
 @comment  node-name,  next,  previous,  up
 @section planner-registry
-@cindex planner-registry
+@cindex @file{planner-registry.el}, using
 
 The @file{planner-registry} module provides a way to keep track of all
 the URLs in your projects, and to list them depending on the current
@@ -3000,7 +3050,7 @@ Level used by the @code{planner-registry-show} function.
 @node planner-zoom, , planner-registry, Task Reports and Overviews
 @comment  node-name,  next,  previous,  up
 @section planner-zoom
-@cindex planner-zoom
+@cindex @file{planner-zoom.el}, using
 @cindex view, weekly
 @cindex view, quarterly
 @cindex view, monthly
@@ -3132,16 +3182,6 @@ window.
 @node More about Notes, Making Files Pretty, More about Tasks, More about Planner
 @section More about Notes
 @cindex notes, more about
-You can put anything in this section. Notes added by
-@file{remember-planner.el} look like this:
-
-@example
-.#1 Headline
-Body
-@end example
-
-and are outlined at the @code{H3} level. If you want to take notes
-conveniently, check out @file{remember-planner.el}.
 
 Planner by default organizes the notes on a planner page so that
 the most recent note is first. Each note is numbered, with the oldest
@@ -3535,30 +3575,17 @@ keybindings.
 
 @node Publishing, Experimental Functions, Interactive Lisp, More about Planner
 @section Publishing
+@cindex publishing
 
-You can publish your planner files to HTML and put them on a normal
-web server--no special server support required. This gives you an easy
-way to keep other people up to date on your tasks, keep a web log, or
-simply organize information.
-
-Publish your planner wiki with @kbd{C-c C-p}
-(@code{muse-project-publish}). You can publish individual files with
-@kbd{C-c C-t} (@code{muse-publish-this-file}). To automatically publish
-files when you save them, add the following code to your
-@file{~/.emacs}:
-
-@example
-(eval-after-load "muse-mode"
-  (add-hook 'after-save-hook
-            #'(lambda ()
-                (when (planner-derived-mode-p 'muse-mode)
-                  (muse-project-publish nil)))
-            nil t))
-@end example
+You can publish your planner files to a variety of different formats.
+For example, you can publish your planner in HTML and put it on a
+normal web server. No special server support is required. This gives
+you an easy way to keep other people up to date on your tasks, keep a
+web log, or simply organize information.
 
 Published files are stored in the path specified by
-@code{muse-project-alist} for your Planner project.  Just copy the
-contents of this directory to your webserver, and you're all set! Of
+@code{muse-project-alist} for your Planner project. Just copy the
+contents of this directory to your web server, and you're all set! Of
 course, publishing is completely optional.
 
 Here are some more features related to publishing:
@@ -3572,21 +3599,41 @@ Here are some more features related to publishing:
 * RDF Publication::             planner-rdf.el
 @end menu
 
-
 @node Publishing Planner pages, Publishing Calendars, Publishing, Publishing
 @comment  node-name,  next,  previous,  up
 @subsection Publishing Planner pages
 @cindex publishing
 @cindex @file{planner-publish.el}, using
 
-The task of publishing Planner pages is handled by
-@file{planner-publish.el}.  It is loaded by default when Planner is
-loaded.  To publish an entire Planner project, set up
-@code{muse-project-alist} (@pxref{Creating Your Planner}) and hit
-@kbd{C-c C-p}.  To publish an individual page, hit @kbd{C-c C-t}.
-
 Publishing works by providing Muse with the settings and environment for
 Planner publishing.
+
+First, make sure that you have set up a proper
+@code{muse-project-alist} (@pxref{Creating Your Planner}).
+
+Second, add:
+
+@example
+(require 'planner-publish)
+@end example
+
+to your @file{.emacs} (or @file{_emacs}).
+
+To publish your entire Planner project, hit @kbd{C-c C-p}
+(@code{muse-project-publish}). To publish just the current buffer, hit
+@kbd{C-c C-t} (@code{muse-publish-this-file}).
+
+To automatically publish files when you save them, add the following
+code to your @file{~/.emacs} (or @file{_emacs}):
+
+@example
+(eval-after-load "muse-mode"
+  (add-hook 'after-save-hook
+            #'(lambda ()
+                (when (planner-derived-mode-p 'muse-mode)
+                  (muse-project-publish nil)))
+            nil t))
+@end example
 
 @subheading Styles provided
 
@@ -3789,6 +3836,38 @@ line. For example:
 #authz ajk sacha
 @end example
 
+@subheading Getting started
+
+Add the following to your .emacs file to cause @kbd{M-x
+muse-project-publish} to automatically use planner-authz features.
+
+@example
+(require 'planner-authz)
+@end example
+
+@subheading Diary markup
+
+If your pages have a section with diary entries maintained by
+planner-appt.el (or by any other means), you can control access to these
+entries.  First, customize @code{planner-section-tagnames} to map your
+diary section ("* Schedule", in this example) to a tag called
+"diary-section".  An example follows.
+
+@example
+(add-to-list 'planner-section-tagnames '("Schedule" . "diary-section"))
+@end example
+
+If the name of your diary section is "* Diary", you will not need to
+customize @code{planner-section-tagnames} by default.
+
+Then make sure the diary entries you want restricted contain a
+corresponding plan page name in parentheses, as in the following
+example.
+
+@example
+10:00 10:30 Meeting with boss (WorkStuff)
+@end example
+
 @subheading Options
 
 @defopt planner-authz-project-default
@@ -3878,6 +3957,7 @@ to all matching RSS feeds specified by
 
 @node iCal Task Publication, RDF Publication, RSS Publication, Publishing
 @comment  node-name,  next,  previous,  up
+@cindex @file{planner-ical.el}, using
 @subsection iCal Publication
 
 iCal is an Internet Engineering Task Force (IETF) standard for
@@ -4118,6 +4198,7 @@ will be able to jump straight to that message.
 @node Unix mail, Gnus, E-mail, E-mail
 @comment  node-name,  next,  previous,  up
 @subsection Unix mail
+@cindex @file{planner-unix-mail.el}, using
 @cindex mbox, using Planner with
 @cindex Unix mail, using Planner with
 @cindex mail client, using Planner with
@@ -4150,6 +4231,7 @@ create any new keybindings.
 @subsection Gnus
 @cindex Gnus, using Planner with
 @cindex mail client, using Planner with, Gnus
+@cindex @file{planner-gnus.el}, using
 
 To use this module, make sure that it is in your load path and put
 this in your @file{.emacs} (or @file{_emacs}):
@@ -4186,6 +4268,7 @@ gnus}.
 @subsection VM
 @cindex VM, using Planner with
 @cindex mail client, using Planner with, VM
+@cindex @file{planner-vm.el}, using
 
 To use this module, make sure that @file{planner-vm.el} is in your load
 path and add this to your @file{.emacs} (or @file{_emacs}):
@@ -4215,6 +4298,7 @@ keybindings.
 @subsection Wanderlust
 @cindex Wanderlust, using Planner with
 @cindex mail client, using Planner with, Wanderlust
+@cindex @file{planner-wl.el}, using
 
 To use this module, make sure that @file{planner-wl.el} is in your
 load path and add this to your @file{.emacs} (or @file{_emacs}):
@@ -4227,8 +4311,6 @@ Then, when you call @kbd{M-x planner-create-task-from-buffer} from
 Wanderlust summary or message buffers, the task will be created with
 the correct annotation.
 
-@file{planner-wl} does not define any interactive functions.
-
 @subheading Keys
 
 To add keybindings to Wanderlust, call:
@@ -4237,13 +4319,14 @@ To add keybindings to Wanderlust, call:
 (planner-wl-insinuate)
 @end example
 
-This binds @kbd{F} to @command{planner-create-task-from-buffer}.
+This binds @kbd{C-c C-t} to @command{planner-create-task-from-buffer}.
 
 @node MH-E, Rmail, Wanderlust, E-mail
 @comment  node-name,  next,  previous,  up
 @subsection MH-E
 @cindex MH-E, using Planner with
 @cindex mail client, using Planner with, MH-E
+@cindex @file{planner-mhe.el}, using
 
 To use this module, make sure that @file{planner-mhe.el} is in your
 load path and add this to your @file{.emacs} (or @file{_emacs}):
@@ -4263,6 +4346,7 @@ the correct annotation.
 @subsection Rmail
 @cindex Rmail, using Planner with
 @cindex mail client, using Planner with, Rmail
+@cindex @file{planner-rmail.el}, using
 
 To use this module, make sure that @file{planner-rmail.el} is in your
 load path and add this to your @file{.emacs} (or @file{_emacs}):
@@ -4351,6 +4435,10 @@ include a @samp{* Diary}:
  "* Tasks\n\n\n* Schedule\n\n\n* Diary\n\n\n* Notes")
 @end example
 
+@kbd{C-c C-e} updates the diary sections.  @kbd{C-u C-c C-e} forces an
+update---it inserts the diary section for the day, even if the day is in
+the past or if there is no @samp{Diary} section in the buffer.
+
 @item
 (GNU EMACS ONLY) You can put the following line of Lisp code in your
 day plan pages to display your diary entries:
@@ -4376,9 +4464,10 @@ If you want to see your diary entries for more than just one day, set
 @code{planner-diary-number-of-days} accordingly.  This works for either
 of the two approaches.
 
-@kbd{C-c C-e} updates the diary sections.  @kbd{C-u C-c C-e} forces an
-update---it inserts the diary section for the day, even if the day is in
-the past or if there is no @samp{Diary} section in the buffer.
+These diary sections are only intended for display. Editing them will
+not affect your diary file. If you want to add entries to your diary,
+you should use the usual Emacs diary and calendar methods for doing
+that, or call @code{planner-diary-add-entry}.
 
 If you want to use the Cal-Desk package, simply follow the instructions
 in @file{cal-desk.el}.  If you get the Cal-Desk layout from the Calendar
@@ -4531,7 +4620,8 @@ from @code{calendar-move-hook}.
 @itemize
 
 @item
-@kbd{C-c C-e} updates the diary sections.
+@kbd{C-c C-e} updates the diary sections by calling
+@code{planner-diary-insert-all-diaries-maybe}.
 
 @end itemize
 
@@ -4991,13 +5081,14 @@ list.
 @cindex timeclock, using Planner with
 
 This module allows you to clock in and clock out of your projects
-(@pxref{Time Intervals, , , Emacs, GNU Emacs Manual}). You can also
-generate reports with the @code{<timeclock-report>} tag. You may want
-to read the @ref{Keeping Track of Time} page to see how you can use
-planner-timeclock to produce detailed reports.
+(@pxref{Time Intervals, , , Emacs, GNU Emacs Manual}) You can also
+generate reports with the @code{<timeclock-report>} tag. You may want to
+read the ``Keeping Track of Time'' page to see how you can use
+planner-timeclock to produce detailed reports;
+@xref{Keeping Track of Time}.
 
-@file{timeclock.el} is part of GNU Emacs.  If you are using XEmacs,
-please use the version of @file{timeclock.el} the comes with Planner in
+@file{timeclock.el} is part of GNU Emacs. If you are using XEmacs,
+please use the version of @file{timeclock.el} that comes with Planner in
 the @file{contrib} directory.
 
 With @file{planner-timeclock.el} loaded,
@@ -5451,7 +5542,7 @@ system.
 @comment  node-name,  next,  previous,  up
 @subsection Log Edit
 @cindex cvs, using Planner with
-@cindex @file{planner-log-edit}, using
+@cindex @file{planner-log-edit.el}, using
 @cindex version control, using Planner with
 
 This module allows you to automatically record CVS (and VC) commits
@@ -5484,19 +5575,33 @@ note.
 @subsection PSVN
 @cindex PSVN
 @cindex @file{planner-psvn.el}, using
+@cindex Subversion, integration with
 
-This file allows you to refer to your svn changesets easily from within
-a Planner page.  You can load the module with @code{(require
-'planner-psvn)}.
+This module enables you to refer to your Subversion (svn) changesets
+easily from within a Planner page, and to have your svn commits recorded
+automatically as notes in your planner.
 
-PSVN URLs are of the form
+You must also have @file{psvn.el}, which is often packaged with
+Subversion in GNU/Linux distributions.
+
+You can then load the module by adding @code{(require 'planner-psvn)} to
+your @file{~/.emacs}.
+
+Once the module is loaded, Planner will pick up annotation information
+from any psvn *svn-log-view* buffer. If you create a task or note while
+in such a buffer, that task will have a hyperlink you can follow to
+return to the changeset later.
+
+These hyperlinks are of the form
 @samp{psvn://http://my.svn-repos.at/svn/project1/trunk@@39}
 
-Additionally there is functionality to generate a note for your commits
-via subversion: just set
-@var{planner-psvn-log-edit-notice-commit-function} to t.
+Additionally, you can have notes for your commits automatically
+generated. Set @var{planner-psvn-log-edit-notice-commit-function} to t
+to enable this.
 
-@file{planner-psvn.el} does not define any interactive functions.
+By default, these commit notes will include a list of the files
+modified. If you would prefer to have this list not included, set
+@var{planner-psvn-log-edit-include-files-flag} to nil.
 
 @node XTLA, Gnats, PSVN, Tracking Development
 @comment  node-name,  next,  previous,  up
@@ -6291,8 +6396,9 @@ After you have read this guide, if you still have questions about
 Planner, or if you have bugs to report, there are several places
 you can go.
 
-Planner has an official website at @url{http://www.plannerlove.com/}.
-It is a collaborative wiki.
+Planner has an official website at
+@url{http://www.emacswiki.org/cgi-bin/wiki/PlannerMode}.  It is a
+collaborative wiki.
 
 Bugs may be reported using the Planner Bug-Tracker at
 @url{http://gna.org/bugs/?group=planner-el}.
@@ -6320,8 +6426,17 @@ using the subscription form at
 list is also available via Gmane with the identifier
 @samp{gmane.emacs.planner.general}.
 
+@item planner-el-logs
+Log messages for commits made to Planner.
+
+You can join this mailing list (@email{planner-el-logs@@gna.org}) using
+the subscription form at
+@url{http://mail.gna.org/listinfo/planner-el-logs/}.  This mailing list
+is also available via Gmane with the identifier
+@samp{gmane.emacs.planner.scm}.
+
 @item planner-el-cvs
-Log messages for changes committed to Planner.
+Generated bug reports for Planner.
 
 You can join this mailing list (@email{planner-el-cvs@@gna.org}) using
 the subscription form at
@@ -6331,8 +6446,8 @@ is also available via Gmane with the identifier
 
 @end table
 
-You can also contact the maintainer of Planner, Michael Olson, at
-@email{mwolson@@gnu.org}, but it is better to use the other options.
+You can also contact the maintainer of Planner, John Sullivan, at
+@email{john@@wjsullivan.net}, but it is better to use the other options.
 
 You can explore the relevant sections of the EmacsWiki.org:
 
@@ -6356,7 +6471,7 @@ questions.
 There is an Orkut community called PlannerMode.
 
 For issues relating to this documentation, please contact John
-Sullivan at @email{johnsu01@@yahoo.com}.
+Sullivan at @email{john@@wjsullivan.net}.
 
 @node Acknowledgements, GNU General Public License, Getting Help, Top
 @comment  node-name,  next,  previous,  up
@@ -6367,6 +6482,11 @@ Sullivan at @email{johnsu01@@yahoo.com}.
 @cindex maintainers
 
 @itemize
+@item 2006
+
+John Sullivan volunteered to maintain Planner, and Michael Olson passed
+the maintainership on to him with the release of Planner 3.41.
+
 @item 2005
 
 Michael Olson, Sacha Chua, and several others from the Planner community

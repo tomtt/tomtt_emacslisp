@@ -26,7 +26,7 @@
 ;; Author: John Wiegley <johnw@gnu.org>
 ;; Maintainer: Michael Olson <mwolson@gnu.org>
 ;; Description: Use Emacs for life planning
-;; URL: http://www.plannerlove.com/
+;; URL: http://www.wjsullivan.net/PlannerMode.html
 ;; Bugs: https://gna.org/bugs/?group=planner-el
 ;; Compatibility: Emacs20, Emacs21, Emacs22, XEmacs21
 
@@ -1072,7 +1072,7 @@ does to the diary buffer."
   (set (make-local-variable 'font-lock-unfontify-region-function)
        'planner-unhighlight-region)
   (set (make-local-variable 'font-lock-defaults)
-       `(nil t nil nil 'beginning-of-line
+       '(nil t nil nil beginning-of-line
              (font-lock-fontify-region-function . muse-colors-region)
              (font-lock-unfontify-region-function
               . planner-unhighlight-region))))
@@ -1175,7 +1175,7 @@ instead of a string."
 REFRESH-BUFFER is an optional buffer to refresh on saving the visited page.
 This makes the bad link face in the linking buffer go away."
   (if (string-match muse-url-regexp link)
-      (muse-browse-url link)
+      (muse-browse-url link other-window)
     (setq link (planner-link-target link))
     (let ((tag (planner-link-anchor link))
           base-buffer)
@@ -1650,6 +1650,8 @@ When called with a prefix argument, prompt for the link display name."
       (setq link (planner-make-link link link-name t)))
     (message "Copied '%s' to the kill-ring." link)
     (kill-new link)))
+(custom-add-option 'planner-annotation-functions
+                   'planner-annotation-as-kill)
 
 (defun planner-annotation-from-planner-note ()
   "Return a link to the current page.
@@ -1665,6 +1667,8 @@ Call when the point is on the first line of the note."
          (concat (planner-page-name)
                  (planner-match-string-no-properties 1))
          t)))))
+(custom-add-option 'planner-annotation-functions
+                   'planner-annotation-from-planner-note)
 
 (defun planner-annotation-from-planner ()
   "Return a wiki link to the current wiki page.
@@ -1675,6 +1679,8 @@ Date pages are not linked."
      ((string-match planner-date-regexp (planner-page-name))
       "") ; None for date pages
      (t (planner-make-link (planner-page-name) nil t)))))
+(custom-add-option 'planner-annotation-functions
+                   'planner-annotation-from-planner)
 
 (defun planner-annotation-from-wiki ()
   "Return the interwiki link to the current wiki page."
@@ -1682,6 +1688,8 @@ Date pages are not linked."
              muse-current-project
              (muse-page-name))
     (concat "[[" (car muse-current-project) "#" (muse-page-name) "]]")))
+(custom-add-option 'planner-annotation-functions
+                   'planner-annotation-from-wiki)
 
 (defun planner-annotation-from-dired ()
   "Return the `default-directory' of the current Dired buffer."
@@ -1694,6 +1702,8 @@ Date pages are not linked."
     (planner-make-link (file-relative-name buffer-file-name
                                            (planner-directory))
                        nil t)))
+(custom-add-option 'planner-annotation-functions
+                   'planner-annotation-from-dired)
 
 (defcustom planner-annotation-use-relative-file nil
   "If t, use relative file links always.
@@ -1734,6 +1744,8 @@ stripped from the link description."
      (when planner-annotation-strip-directory
        (file-name-nondirectory buffer-file-name))
      t)))
+(custom-add-option 'planner-annotation-functions
+                   'planner-annotation-from-file)
 
 ;;;###autoload
 (defun planner-annotation-from-file-with-position ()
@@ -2387,7 +2399,7 @@ status and priority."
 
 (defun planner-sort-tasks ()
   "Sort the tasks.
-On day pages, sort according to priority and position.  On plan
+On day pages, sort according to priority and position.	On plan
 pages, sort according to status, priority, date, and position."
   (interactive)
   (let ((case-fold-search nil)
@@ -2782,7 +2794,8 @@ INCLUDE-BODY is non-nil, return the body text, else return nil."
             (when (save-excursion
                     (save-match-data (re-search-backward regexp start t)))
               (add-to-list 'page-results
-                           (list (concat page anchor)
+                           (list (concat filename anchor)
+                                 (concat page anchor)
                                  title
                                  (if include-body
                                      (buffer-substring-no-properties
@@ -2795,7 +2808,8 @@ INCLUDE-BODY is non-nil, return the body text, else return nil."
             (goto-char (point-max))
             (when (save-excursion (re-search-backward regexp start t))
               (add-to-list 'page-results
-                           (list (concat page anchor)
+                           (list (concat filename anchor)
+                                 (concat page anchor)
                                  title
                                  (if include-body
                                      (buffer-substring-no-properties
@@ -4004,7 +4018,7 @@ Return nil if not found."
   "Display all tasks that match the STATUS regular expression on all day pages.
 If PAGES is:
   t: check all pages
-  nil: check all plan pages
+  nil: check all day pages
   regexp: search all pages whose filenames match the regexp
   list of page names: limit to those pages
   alist of page/filename: limit to those pages
@@ -4101,11 +4115,11 @@ or after LIMIT. If INCLUDE-BODY is non-nil, return the body as well."
              (if include-body
                  (lambda (item)
                    (insert "** "
-                           (planner-make-link (elt item 0)) "\t"
-                           (elt item 2) "\n\n"))
+                           (planner-make-link (elt item 0) (elt item 1)) "\t"
+                           (elt item 3) "\n\n"))
                (lambda (item)
-                 (insert (planner-make-link (elt item 0)) "\t"
-                         (cadr item) "\n")))
+                 (insert (planner-make-link (elt item 0) (elt item 1)) "\t"
+                         (elt item 2) "\n")))
              results)
             (planner-mode)
             (goto-char (point-min))

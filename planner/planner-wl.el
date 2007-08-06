@@ -5,7 +5,7 @@
 
 ;; Author: Yvonne Thomson (yvonne AT thewatch DOT net)
 ;; Keywords: planner, wanderlust, wl
-;; URL: http://www.plannerlove.com/
+;; URL: http://www.wjsullivan.net/PlannerMode.html
 
 ;; This file is part of Planner.  It is not part of GNU Emacs.
 
@@ -38,7 +38,7 @@
 ;;
 ;;   (planner-wl-insinuate)
 ;;
-;; This binds F in summary buffers to `planner-create-task-from-buffer'
+;; This binds C-c C-t in summary buffers to `planner-create-task-from-buffer'
 
 ;; Note:
 ;;  `planner-wl-annotation-from-wl' uses `wl-summary-from-function' (and
@@ -62,12 +62,9 @@
 ;;;###autoload
 (defun planner-wl-insinuate ()
   "Hook Planner into Wanderlust.
-
-Adds special planner keybindings to the variable `wl-summary-mode-map'.
-From the Wanderlust Summary view, you can type:
-
-F planner-task-from-wl"
-  (define-key wl-summary-mode-map "F" 'planner-create-task-from-buffer))
+Add special planner keybindings to`wl-summary-mode-map'.
+From the Wanderlust Summary view, you can type C-c C-t to create a task."
+  (define-key wl-summary-mode-map (kbd "C-c C-t") 'planner-create-task-from-buffer))
 
 ;;;###autoload
 (defun planner-wl-annotation-from-wl ()

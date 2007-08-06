@@ -71,6 +71,10 @@
 (require 'muse-html) ;;; allow derive style from "html" and "xhtml"
 (require 'muse-xml)  ;;; allow derive style from "xml"
 
+(unless (featurep 'muse-nested-tags)
+  (error (concat "Your version of Muse is too old.  Please upgrade to"
+                 " at least Muse 3.03.")))
+
 (defgroup planner-publish nil
   "Options controlling the behavior of PLANNER publishing.
 See `planner-publish' for more information."
@@ -89,7 +93,7 @@ For more on the structure of this list, see `muse-publish-markup-regexps'."
                         integer
                         (choice string function symbol))
                   function))
-  :group 'muse-html)
+  :group 'planner-publish)
 
 (defcustom planner-publish-markup-functions
   '((task . planner-publish-markup-task)
@@ -101,21 +105,22 @@ For more on the structure of this list, see
   :group 'planner-publish)
 
 (defcustom planner-publish-markup-tags
-  '(("nested-section" t nil planner-publish-nested-section-tag)
-    ("title" t t planner-publish-title-tag)
-    ("content" t nil planner-publish-content-tag)
-    ("diary-section" t nil planner-publish-diary-section-tag)
-    ("tasks-section" t nil planner-publish-tasks-section-tag)
-    ("notes-section" t nil planner-publish-notes-section-tag)
-    ("notes"   nil nil planner-publish-notes-tag)
-    ("past-notes" nil t planner-publish-past-notes-tag)
-    ("task"    t t   planner-publish-task-tag)
-    ("note"    t t   planner-publish-note-tag))
+  '(("nested-section" t nil t planner-publish-nested-section-tag)
+    ("title" t t nil planner-publish-title-tag)
+    ("content" t nil nil planner-publish-content-tag)
+    ("diary-section" t nil nil planner-publish-diary-section-tag)
+    ("tasks-section" t nil nil planner-publish-tasks-section-tag)
+    ("notes-section" t nil nil planner-publish-notes-section-tag)
+    ("notes"   nil nil nil planner-publish-notes-tag)
+    ("past-notes" nil t nil planner-publish-past-notes-tag)
+    ("task"    t t nil planner-publish-task-tag)
+    ("note"    t t nil planner-publish-note-tag))
   "A list of tag specifications, for specially marking up PLANNER.
 See `muse-publish-markup-tags' for more information."
   :type '(repeat (list (string :tag "Markup tag")
                        (boolean :tag "Expect closing tag" :value t)
                        (boolean :tag "Parse attributes" :value nil)
+                       (boolean :tag "Nestable" :value nil)
                        function))
   :group 'planner-publish)
 
@@ -441,13 +446,22 @@ See `muse-publish-markup-regexps' for details on the syntax used."
 
 ;;;_ + Markup
 
+(defvar planner-publish-ignore-url-desc-specials nil
+  "If non-nil, do not escape specials in URL descriptions.")
+
+(defun planner-publish-decide-specials (context)
+  "Determine the specials to escape for Planner, depending on CONTEXT."
+  (if (and (eq context 'url-desc)
+           planner-publish-ignore-url-desc-specials)
+      nil
+    (muse-xml-decide-specials context)))
+
 (defun planner-publish-markup-task ()
   "Replace tasks with XML representation of task data."
   (save-restriction
     (narrow-to-region
      (planner-line-beginning-position)
      (planner-line-end-position))
-    (muse-publish-escape-specials (point-min) (point-max))
     (let ((info (planner-current-task-info)))
       (delete-region (point-min) (point-max))
       (forward-line 1)
@@ -460,9 +474,10 @@ See `muse-publish-markup-regexps' for details on the syntax used."
                     (planner-task-status info)) "")
                (or (planner-task-link-text info) "")
                (or (planner-task-plan info) "")
-               (or (planner-task-date info) ""))
-       (planner-task-description info)  ; mark this area read only
-       "</task>"))))
+               (or (planner-task-date info) "")))
+      ;; mark this area read only for safety's sake
+      (planner-insert-markup (planner-task-description info))
+      (insert "</task>"))))
 
 (defun planner-publish-markup-note ()
   "Replace note with XML representation of note data.  Borrowed
@@ -483,8 +498,9 @@ heavily from Sacha's personal configs."
                       (or (planner-note-link info) "")
                       (or (planner-note-link-text info) ""))
               "<title level=\"3\">" (planner-note-title info) "</title>\n"
-              "<content>\n" (planner-note-body info) "\n\n</content>\n"
-              "</note>\n"))))
+              "<content>\n")
+      (planner-insert-markup (planner-note-body info))
+      (insert "\n\n</content>\n</note>\n"))))
 
 
 ;;;_ + Tags
@@ -551,6 +567,12 @@ of each section."
           (link     (cdr (assoc "link" attrs)))
           (plan     (cdr (assoc "plan" attrs)))
           (date     (cdr (assoc "date" attrs))))
+      (remove-text-properties beg end
+                              '(read-only nil rear-nonsticky nil))
+      (goto-char end)
+      (when link
+        (insert " (" (planner-make-link link) ")"))
+      (planner-insert-markup (muse-markup-text 'planner-end-task))
       (goto-char beg)
       (planner-insert-markup
        (muse-markup-text 'planner-begin-task
@@ -558,11 +580,7 @@ of each section."
                          priority
                          (concat priority number " "
                                  (planner-publish-task-status-collapse status)
-                                 " ")))
-      (goto-char end)
-      (when link
-        (insert " (" (planner-make-link link) ")"))
-      (planner-insert-markup (muse-markup-text 'planner-end-task)))))
+                                 " "))))))
 
 (defun planner-publish-notes-section-tag (beg end)
   "Replace the region BEG to END with the notes for this page."
@@ -628,7 +646,8 @@ DIRECTORY and START."
           (timestamp  (or (cdr (assoc "timestamp" attrs)) ""))
           (link       (or (cdr (assoc "link" attrs)) ""))
           (categories (or (cdr (assoc "categories" attrs)) "")))
-
+      (remove-text-properties beg end
+                              '(read-only nil rear-nonsticky nil))
       (goto-char beg)
       (planner-insert-markup (muse-markup-text 'planner-begin-note
                                                anchor
@@ -640,8 +659,9 @@ DIRECTORY and START."
       (insert link)
       (planner-insert-markup (muse-markup-text 'planner-end-note-link))
       ;; remove link item from categories to avoid duplicates
-      (setq categories (planner-replace-regexp-in-string (regexp-quote link)
-                                                         categories "" t t))
+      (unless (or (string= link "") (string= categories ""))
+        (setq categories (planner-replace-regexp-in-string
+                          (regexp-quote link) "" categories t t)))
       (planner-insert-markup (muse-markup-text 'planner-begin-note-categories))
       (insert categories)
       (planner-insert-markup (muse-markup-text 'planner-end-note-categories))
@@ -717,34 +737,38 @@ DIRECTORY and START."
 
 ;;;_ + Planner Style Definitions
 
-(unless (assoc "planner-xml" muse-publishing-styles)
-  (muse-derive-style "planner-xml" "xml"
-                     :regexps   'planner-publish-markup-regexps
-                     :functions 'planner-publish-markup-functions
-                     :tags      'planner-publish-markup-tags
-                     :strings   'planner-xml-markup-strings
-                     :before    'planner-publish-prepare-buffer
-                     :after     'planner-publish-finalize-buffer
-                     :header    'planner-xml-header
-                     :footer    'planner-xml-footer)
-  (muse-derive-style "planner-html" "html"
-                     :regexps   'planner-publish-markup-regexps
-                     :functions 'planner-publish-markup-functions
-                     :tags      'planner-publish-markup-tags
-                     :strings   'planner-html-markup-strings
-                     :before    'planner-publish-prepare-buffer
-                     :after     'planner-publish-finalize-buffer
-                     :header    'planner-html-header
-                     :footer    'planner-html-footer)
-  (muse-derive-style "planner-xhtml" "xhtml"
-                     :regexps   'planner-publish-markup-regexps
-                     :functions 'planner-publish-markup-functions
-                     :tags      'planner-publish-markup-tags
-                     :strings   'planner-html-markup-strings
-                     :before    'planner-publish-prepare-buffer
-                     :after     'planner-publish-finalize-buffer
-                     :header    'planner-xhtml-header
-                     :footer    'planner-xhtml-footer))
+(muse-derive-style "planner-xml" "xml"
+                   :regexps   'planner-publish-markup-regexps
+                   :functions 'planner-publish-markup-functions
+                   :tags      'planner-publish-markup-tags
+                   :specials  'planner-publish-decide-specials
+                   :strings   'planner-xml-markup-strings
+                   :before    'planner-publish-prepare-buffer
+                   :after     'planner-publish-finalize-buffer
+                   :header    'planner-xml-header
+                   :footer    'planner-xml-footer)
+
+(muse-derive-style "planner-html" "html"
+                   :regexps   'planner-publish-markup-regexps
+                   :functions 'planner-publish-markup-functions
+                   :tags      'planner-publish-markup-tags
+                   :specials  'planner-publish-decide-specials
+                   :strings   'planner-html-markup-strings
+                   :before    'planner-publish-prepare-buffer
+                   :after     'planner-publish-finalize-buffer
+                   :header    'planner-html-header
+                   :footer    'planner-html-footer)
+
+(muse-derive-style "planner-xhtml" "xhtml"
+                   :regexps   'planner-publish-markup-regexps
+                   :functions 'planner-publish-markup-functions
+                   :tags      'planner-publish-markup-tags
+                   :specials  'planner-publish-decide-specials
+                   :strings   'planner-html-markup-strings
+                   :before    'planner-publish-prepare-buffer
+                   :after     'planner-publish-finalize-buffer
+                   :header    'planner-xhtml-header
+                   :footer    'planner-xhtml-footer)
 
 (provide 'planner-publish)
 

@@ -214,7 +214,8 @@ If ARROWS is non-nil, include prev/next month arrows."
 
 (defun planner-calendar-published-file-href (page &optional name nop)
   "Return an href anchor string to the published PAGE if PAGE exists."
-  (if (and (planner-page-file page)
+  (if (and (stringp page)
+	   (planner-page-file page)
 	   (not (planner-private-p (planner-page-file page))))
       (planner-link-href page (or name page))
     (or name page)))
@@ -311,7 +312,8 @@ support POSIX \"ln\"."
 (defun planner-calendar-prev-month-href (month year name &optional nop max-days)
   "Return an href anchor string for the last day page in the previous month."
   (let ((prev-date (planner-calendar-prev-date (list month 1 year) max-days))
-	(muse-publish-desc-transforms nil))
+	(muse-publish-desc-transforms nil)
+	(planner-publish-ignore-url-desc-specials t))
     (planner-calendar-published-file-href
      (planner-calendar-date-to-filename prev-date) name nop)))
 
@@ -321,7 +323,8 @@ support POSIX \"ln\"."
 	 (planner-calendar-next-date
 	  (list month (calendar-last-day-of-month month year) year)
 	  max-days))
-	(muse-publish-desc-transforms nil))
+	(muse-publish-desc-transforms nil)
+	(planner-publish-ignore-url-desc-specials t))
     (planner-calendar-published-file-href
      (planner-calendar-date-to-filename next-date) name nop)))
 
@@ -376,7 +379,7 @@ support POSIX \"ln\"."
 (eval-after-load "planner-publish"
   '(progn
      (add-to-list 'planner-publish-markup-tags
-		  '("calendar" nil t planner-publish-calendar-tag)
+		  '("calendar" nil t nil planner-publish-calendar-tag)
 		  t)
      (add-to-list 'planner-publish-finalize-regexps
 		  '(200 "<\\(calendar\\)\\(\\s-+[^<>\n]+[^</>\n]\\)?\\(/\\)?>"

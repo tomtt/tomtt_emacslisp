@@ -7,10 +7,15 @@ documentation to Planner.
 John Wiegley: Original author
               (assigned past and future changes for Emacs)
 
-Michael Olson: Current maintainer
+John Sullivan: Current maintainer
+               Author of:
+                - planner-el.texi
+               (assigned past and future changes)
+
+Michael Olson: Previous maintainer (2005-11-01 to 2006-06-27)
                (assigned past and future changes for Emacs)
 
-Sacha Chua: Previous maintainer from 2004-01-01 to 2005-10
+Sacha Chua: Previous maintainer (2004-01-01 to 2005-10-31)
             Author of:
              - planner-accomplishments.el
              - planner-cyclic.el
@@ -102,7 +107,7 @@ Travis B. Hartwell: Contributor
                     (assigned past and future changes)
 
 Magnus Henoch: Contributor:
-                - planner-gnus.el (4 lines changed)
+                - planner-gnus.el (5 lines changed)
 
 Yann Hodique: Contributor:
                - planner-bbdb.el (6 lines changed)
@@ -217,6 +222,9 @@ Stefan Reichör: Author of:
                  - planner.el (15+ lines changed)
                 (assigned past and future changes)
 
+Marko Schütz: Contributor:
+               - planner-timeclock-summary-proj.el (1 line changed)
+
 Dale P. Smith: Contributor:
                 - planner-gnus.el (2 lines changed)
                 - planner-publish.el (15+ lines changed)
@@ -227,12 +235,6 @@ David D. Smith: Contributor:
                  - planner-publish.el
                  - planner-rss.el (15+ lines changed)
                  - planner.el (15+ lines changed)
-
-John Sullivan: Author of:
-                - planner-el.texi
-               Contributor:
-                - planner-w3m.el
-               (assigned past and future changes)
 
 Yvonne Thomson: Author of:
                  - planner-wl.el
@@ -270,4 +272,13 @@ Contributed software
 
 This is a listing of authors of software in the `contrib' directory.
 
-John Wiegley: schedule.el, timeclock.el
+Adrian Aichner: Contributor:
+                 - timeclock.el (15+ lines changed)
+
+John Wiegley: Author:
+               - schedule.el
+               - timeclock.el
+
+;; Local Variables:
+;; coding: utf-8
+;; End:

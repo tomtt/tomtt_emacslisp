@@ -1,28 +1,30 @@
 ;;; timeclock.el --- mode for keeping track of how much you work
 
 ;; Copyright (C) 1999, 2000, 2001, 2003, 2004 Free Software Foundation, Inc.
+;; Parts copyright (C) 2006 Adrian Aichner
 
 ;; Author: John Wiegley <johnw@gnu.org>
 ;; Created: 25 Mar 1999
-;; Version: 2.6
+;; Version: 2.7
 ;; Keywords: calendar data
 
-;; This file is part of GNU Emacs.
+;; This version of timeclock.el is part of Planner.  It is not part of
+;; GNU Emacs.
 
-;; GNU Emacs is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
+;; Planner is free software; you can redistribute it and/or modify it
+;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
+;; Planner is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-;; Boston, MA 02111-1307, USA.
+;; along with Planner; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -75,6 +77,12 @@
 
 ;;; History:
 
+;; Version 2.7:
+;;
+;; Include changes made on 2006-08-01 by Aidrian Aichner
+;; <adrian@xemacs.org> which make it easier to work with a
+;; pgp-encrypted timeclock file.
+
 ;;; Code:
 
 (unless (featurep 'xemacs)
@@ -91,7 +99,7 @@
   (error "Do not use this version of timeclock.el with Emacs"))
 
 (defgroup timeclock nil
-  "Keeping track time of the time that gets spent."
+  "Keeping track of the time that gets spent."
   :group 'data)
 
 ;;; User Variables:
@@ -152,6 +160,19 @@ This variable only has effect if set with \\[customize]."
 	     (add-hook 'kill-emacs-query-functions 'timeclock-query-out)
 	   (remove-hook 'kill-emacs-query-functions 'timeclock-query-out))
 	 (setq timeclock-ask-before-exiting value))
+  :type 'boolean
+  :group 'timeclock)
+
+(defvar timeclock-history '()
+  "History of previously used timeclock values.")
+
+(defcustom timeclock-use-history nil
+  "*If non-nil, user is prompted for timestamp, previous values are
+available via history mechanism.
+
+\\{minibuffer-local-map}.
+
+This variable only has effect if set with \\[customize]."
   :type 'boolean
   :group 'timeclock)
 
@@ -600,6 +621,12 @@ relative only to the time worked today, and not to past time."
 (defvar timeclock-project-list nil)
 (defvar timeclock-last-project nil)
 
+(defun timeclock-get-timeclock-file-buffer (file)
+  "Return the buffer visiting timeclock-file FILE."
+  (or
+   (get-file-buffer file)
+   (find-file-noselect file)))
+
 (defun timeclock-propertize (string &rest props)
   (let ((string (copy-sequence string)))
     (while props
@@ -671,13 +698,19 @@ that variable's documentation."
   "Log the event CODE to the timeclock log, at the time of call.
 If PROJECT is a string, it represents the project which the event is
 being logged for.  Normally only \"in\" events specify a project."
-  (with-current-buffer (find-file-noselect timeclock-file)
+  (with-current-buffer
+      (timeclock-get-timeclock-file-buffer timeclock-file)
     (goto-char (point-max))
     (if (not (bolp))
 	(insert "\n"))
     (let ((now (current-time)))
       (insert code " "
-	      (format-time-string "%Y/%m/%d %H:%M:%S" now)
+	      (if timeclock-use-history
+		  (read-string "timeclock time: "
+			       (format-time-string "%Y/%m/%d %H:%M:%S" now)
+			       'timeclock-history
+			       (format-time-string "%Y/%m/%d %H:%M:%S" now))
+		(format-time-string "%Y/%m/%d %H:%M:%S" now))
 	      (or (and project
 		       (stringp project)
 		       (> (length project) 0)
@@ -695,7 +728,10 @@ being logged for.  Normally only \"in\" events specify a project."
       (setq timeclock-last-event (list code now project)))
     (save-buffer)
     (run-hooks 'timeclock-event-hook)
-    (kill-buffer (current-buffer))))
+    ;; APA: Don't kill buffer to avoid having to read in (potentially
+    ;; encrypted) file.
+    ;; (kill-buffer (current-buffer))
+    ))
 
 (defvar timeclock-moment-regexp
   (concat "\\([bhioO]\\)\\s-+"
@@ -704,16 +740,23 @@ being logged for.  Normally only \"in\" events specify a project."
 
 (defsubst timeclock-read-moment ()
   "Read the moment under point from the timelog."
-  (if (looking-at timeclock-moment-regexp)
-      (let ((code (match-string 1))
-	    (year (string-to-number (match-string 2)))
-	    (mon  (string-to-number (match-string 3)))
-	    (mday (string-to-number (match-string 4)))
-	    (hour (string-to-number (match-string 5)))
-	    (min  (string-to-number (match-string 6)))
-	    (sec  (string-to-number (match-string 7)))
-	    (project (match-string 8)))
-	(list code (encode-time sec min hour mday mon year) project))))
+  (cond
+   ((looking-at timeclock-moment-regexp)
+    (let ((code (match-string 1))
+	  (year (string-to-number (match-string 2)))
+	  (mon  (string-to-number (match-string 3)))
+	  (mday (string-to-number (match-string 4)))
+	  (hour (string-to-number (match-string 5)))
+	  (min  (string-to-number (match-string 6)))
+	  (sec  (string-to-number (match-string 7)))
+	  (project (match-string 8)))
+      (list code (encode-time sec min hour mday mon year) project)))
+   ((not (eobp))
+    (error "unexpected data in %s: %s"
+	   timeclock-file
+	   (buffer-substring
+	    (point-at-bol)
+	    (point-at-eol))))))
 
 (defun timeclock-last-period (&optional moment)
   "Return the value of the last event period.
@@ -996,7 +1039,8 @@ See the documentation for the given function if more info is needed."
 	 last-date-limited last-date-seconds last-date
 	 (line 0) last beg day entry event)
     (with-temp-buffer
-      (insert-file-contents (or filename timeclock-file))
+      (insert-buffer
+       (timeclock-get-timeclock-file-buffer (or filename timeclock-file)))
       (when recent-only
 	(goto-char (point-max))
 	(unless (re-search-backward "^b\\s-+" nil t)
@@ -1079,7 +1123,8 @@ discrepancy, today's discrepancy, and the time worked today."
   ;;    total)
   (let* ((now (current-time))
 	 (todays-date (timeclock-time-to-date now))
-	 (first t) (accum 0) (elapsed 0)
+	 ;; XEmacs change
+	 (first t) (accum 0) (elapsed 0) (line 0)
 	 event beg last-date avg
 	 last-date-limited last-date-seconds)
     (unless timeclock-discrepancy
@@ -1089,11 +1134,14 @@ discrepancy, today's discrepancy, and the time worked today."
 	      timeclock-reason-list nil
 	      timeclock-elapsed 0)
 	(with-temp-buffer
-	  (insert-file-contents timeclock-file)
+	  (insert-buffer
+	   (timeclock-get-timeclock-file-buffer timeclock-file))
 	  (goto-char (point-max))
 	  (unless (re-search-backward "^b\\s-+" nil t)
 	    (goto-char (point-min)))
 	  (while (setq event (timeclock-read-moment))
+	    ;; XEmacs change
+	    (setq line (1+ line))
 	    (cond ((equal (car event) "b")
 		   (setq accum (string-to-number (nth 2 event))))
 		  ((equal (car event) "h")
@@ -1117,14 +1165,16 @@ discrepancy, today's discrepancy, and the time worked today."
 		     (setq last-date date
 			   last-date-limited nil)
 		     (if beg
-			 (error "Error in format of timelog file!")
+			 ;; XEmacs change
+			 (error "Error in format of timelog file, line %d" line)
 		       (setq beg (timeclock-time-to-seconds (cadr event))))))
 		  ((equal (downcase (car event)) "o")
 		   (if (and (nth 2 event)
 			    (> (length (nth 2 event)) 0))
 		       (add-to-list 'timeclock-reason-list (nth 2 event)))
 		   (if (not beg)
-		       (error "Error in format of timelog file!")
+		       ;; XEmacs change
+		       (error "Error in format of timelog file, line %d" line)
 		     (setq timeclock-last-period
 			   (- (timeclock-time-to-seconds (cadr event)) beg)
 			   accum (+ timeclock-last-period accum)
@@ -1375,7 +1425,8 @@ HTML-P is non-nil, HTML markup is added."
 (defun timeclock-visit-timelog ()
   "Open the file named by `timeclock-file' in another window."
   (interactive)
-  (find-file-other-window timeclock-file))
+  (switch-to-buffer-other-window
+   (timeclock-get-timeclock-file-buffer timeclock-file)))
 
 (provide 'timeclock)
 

@@ -1,12 +1,12 @@
 ;;; planner-gnus.el --- Gnus integration for the Emacs Planner
 
 ;; Copyright (C) 2001, 2003, 2004, 2005,
-;;   2006 Free Software Founation, Inc.
+;;   2006 Free Software Foundation, Inc.
 ;; Parts copyright (C) 2004 Mario Domgörgen (kanaldrache AT gmx.de)
 
 ;; Author: John Wiegley <johnw@gnu.org>
 ;; Keywords: planner, gnus
-;; URL: http://www.plannerlove.com/
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/PlannerMode
 
 ;; This file is part of Planner.  It is not part of GNU Emacs.
 
@@ -71,7 +71,7 @@ Adds special planner keybindings to the variable
 `gnus-summary-article-map'. From a summary or article buffer, you
 can type C-c C-t to call planner-create-task-from-buffer."
   (eval-after-load 'gnus-sum
-    `(define-key gnus-summary-article-map ,(kbd "C-c C-t")
+    `(define-key gnus-summary-mode-map ,(kbd "C-c C-t")
        'planner-create-task-from-buffer))
   (eval-after-load 'gnus
     `(define-key gnus-article-mode-map ,(kbd "C-c C-t")
@@ -215,9 +215,12 @@ Raise this if you have problems browsing gnus URLs.")
               (when (cadr (split-string group ":")) ;; group contains a :
                 (setq group (concat (car (split-string group ":")) ":"
                                     reg-group)))))))
-      (condition-case err
-          (gnus-fetch-group group planner-gnus-group-threshold)
-        (error (gnus-fetch-group group)))
+      ;; Don't automatically select an article, as that might mark
+      ;; unread articles as read.
+      (let ((gnus-auto-select-first nil))
+        (condition-case err
+            (gnus-fetch-group group planner-gnus-group-threshold t group)
+          (error (gnus-fetch-group group))))
       (mapcar
        (lambda (article-id)
          (gnus-summary-goto-article article-id nil t))
