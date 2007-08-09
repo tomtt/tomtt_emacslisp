@@ -3,7 +3,10 @@
 (require 'planner-registry)
 (require 'planner-psvn)
 (require 'planner-calendar)
-
+(require 'planner-multi)
+(require 'planner-cyclic)
+(require 'planner-timeclock-summary-proj)
+(require 'planner-w3m)
 
 (load "rem2diary")
 
@@ -58,11 +61,12 @@
 (global-set-key "\C-cpb" 'planner-create-medium-priority-task-from-buffer) ; insert B-level task
 (global-set-key "\C-cpc" 'planner-create-low-priority-task-from-buffer) ; insert C-level task
 (global-set-key "\C-cpt" 'planner-create-task) ; insert unrelated task
+(global-set-key "\C-cp." 'planner-copy-or-move-task) ; move task
 (global-set-key "\C-cpd" 'calendar) ; insert diary entry
-(global-set-key "\C-cpe"                ; change deadline
-                'planner-deadline-change)
-;;(global-set-key "\C-cpn" 'remember)     ; insert note
-(global-set-key "\C-cpo"                ; open diary
-                'my-diary-open)
-(global-set-key "\C-cp\C-s"             ; search notes
-                'planner-search-notes)
+(global-set-key "\C-cpe" 'planner-deadline-change) ; change deadline
+(global-set-key "\C-cpn" 'remember) ; insert note
+(global-set-key "\C-cpo" 'my-diary-open) ; open diary
+(global-set-key "\C-cpu" 'planner-update-task) ; update task
+(global-set-key "\C-cp\C-s" 'planner-search-notes) ; search notes
+
+(setq timeclock-file "~/created/productivity/timelog")
