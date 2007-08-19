@@ -5,13 +5,18 @@
 (require 'planner-calendar)
 (require 'planner-multi)
 (require 'planner-cyclic)
+(require 'planner-diary)
 (require 'planner-timeclock-summary-proj)
 (require 'planner-w3m)
+(require 'planner-vm)
+
+(setq diary-file "~/created/productivity/diary")
+(setq european-calendar-style t)
+(add-hook 'diary-display-hook 'fancy-diary-display)
 
 (load "rem2diary")
 
 (planner-registry-initialize)
-(setq planner-directory "~/created/plans")
 (setq remember-handler-functions '(remember-planner-append))
 (setq remember-annotation-functions planner-annotation-functions)
 
@@ -35,7 +40,10 @@
                      ;;  of Planner)
                      :path "~/public_html/plans"))))
 
-(setq planner-day-page-template "* Tasks\n\n\n* Schedule\n\n\n* Notes\n\n\n")
+(setq planner-diary-use-diary t)
+(planner-diary-insinuate)
+(planner-insinuate-calendar)
+(setq planner-day-page-template "* Tasks\n\n\n* Schedule\n\n\n* Diary\n\n\n* Notes\n\n")
 (eval-after-load "muse-publish"
   '(add-hook 'muse-after-publish-hook
              'planner-calendar-create-today-link))
