@@ -88,16 +88,16 @@
 (require 'muse-texinfo)
 (require 'muse-docbook)
 (require 'muse-project)  ; publish files in projects
-
 (load "tomtt-planner")
 (require 'remember)
 (require 'tomtt)
+(require 'autotest)
 
 (setq ruby-electric-matching-delimeter-alist nil)
 (setq auto-mode-alist
      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
 (setq cssm-indent-function #'cssm-c-style-indenter)
-(global-set-key "\C-f" 'anything)
+(global-set-key "\C-c\C-f" 'anything)
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
 (setq ecb-tip-of-the-day nil)

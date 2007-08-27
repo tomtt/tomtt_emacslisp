@@ -9,6 +9,7 @@
 (require 'planner-timeclock-summary-proj)
 (require 'planner-w3m)
 (require 'planner-vm)
+(require 'planner-deadline)
 
 (setq diary-file "~/created/productivity/diary")
 (setq european-calendar-style t)
