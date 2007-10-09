@@ -136,6 +136,9 @@
 (color-theme-initialize)
 (load "color-theme-tomtt")
 
+;; light
+;(color-theme-high-contrast)
+
 ;; dark
 ;(color-theme-hober)
 
