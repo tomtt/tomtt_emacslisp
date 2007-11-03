@@ -27,6 +27,11 @@ end"))
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
   ("pv" . "$${var}=#{$${var}} "))
 
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("nsev" . "<%= show_event_detail('$${name}'), Date.new($${2007}, $${m}, $${d}), '$${time}', '$${location}', '$${price}', '$${band}', '$${formal}', '$${info}') %>"))
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("nspgm" . "<%= render(:partial => \"$${label}_programme\") %>\n$><a href=\"/page/events/$${label}_programme\">View programme on single page</a>"))
+
 (defun html-indent-or-complete ()
   "Complete if point is at end of a word, otherwise indent line."
   (interactive)
