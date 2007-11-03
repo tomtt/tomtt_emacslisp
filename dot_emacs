@@ -61,6 +61,7 @@
 (add-to-load-path-if-exists "~/.emacslisp/muse")
 (add-to-load-path-if-exists "~/.emacslisp/planner")
 (add-to-load-path-if-exists "~/.emacslisp/remember")
+(add-to-load-path-if-exists "~/.emacslisp/git-emacs")
 
 (setq semantic-load-turn-everything-on t)
 
@@ -92,6 +93,8 @@
 (require 'remember)
 (require 'tomtt)
 (require 'autotest)
+(require 'erc)
+(require 'git)
 
 (setq ruby-electric-matching-delimeter-alist nil)
 (setq auto-mode-alist
@@ -120,6 +123,7 @@
 (add-to-list 'auto-mode-alist '("\\.rjs\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.dryml\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("sake\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\dot_emacs\\'" . emacs-lisp-mode))
 
 (tool-bar-mode 0)
