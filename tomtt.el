@@ -19,6 +19,14 @@
 </html>
 "))
 
+(snippet-with-abbrev-table 'html-mode-abbrev-table
+  ("sld" .  "<div class=\"slide\">
+  <h1>$${title}</h1>
+  <p class=\"subhead\">$${subhead}</p>
+  $.
+</div>"))
+
+
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
   ("def" . "def $${funtion_name} $${args}
   $.
