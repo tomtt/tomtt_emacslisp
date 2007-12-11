@@ -1,3 +1,5 @@
+(defvar *emacs-load-start* (current-time))
+
 ;; do not display a splash screen on startup
 (setq inhibit-splash-screen t)
 
@@ -62,6 +64,8 @@
 (add-to-load-path-if-exists "~/.emacslisp/planner")
 (add-to-load-path-if-exists "~/.emacslisp/remember")
 (add-to-load-path-if-exists "~/.emacslisp/git-emacs")
+(add-to-load-path-if-exists "~/.emacslisp/ruby")
+(add-to-load-path-if-exists "~/.emacslisp/org")
 
 (setq semantic-load-turn-everything-on t)
 
@@ -83,18 +87,18 @@
 (require 'haml-mode)
 (require 'sass-mode)
 
-(require 'muse-mode)     ; load authoring mode
-(require 'muse-html)     ; load publishing styles I use
-(require 'muse-latex)
-(require 'muse-texinfo)
-(require 'muse-docbook)
-(require 'muse-project)  ; publish files in projects
-(load "tomtt-planner")
 (require 'remember)
 (require 'tomtt)
 (require 'autotest)
 (require 'erc)
 (require 'git)
+(require 'org)
+
+;(load "tomtt-planner")
+(load "tomtt-org")
+
+(setq ri-ruby-script "/home/tomtt/.emacslisp/ruby/ri-emacs.rb")
+(autoload 'ri  "/home/tomtt/.emacslisp/ruby/ri-ruby.el" nil t)
 
 (setq ruby-electric-matching-delimeter-alist nil)
 (setq auto-mode-alist
@@ -124,6 +128,7 @@
 (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.dryml\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("sake\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (add-to-list 'auto-mode-alist '("\\dot_emacs\\'" . emacs-lisp-mode))
 
 (tool-bar-mode 0)
@@ -197,6 +202,10 @@
       (add-hook 'comint-output-filter-functions
                 'comint-strip-ctrl-m)))
 
-(server-start)
-(plan)
-(delete-other-windows)
+;(server-start)
+;(plan)
+;(delete-other-windows)
+
+(message "My .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
+                                    (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
+

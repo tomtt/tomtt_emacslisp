@@ -2399,7 +2399,7 @@ status and priority."
 
 (defun planner-sort-tasks ()
   "Sort the tasks.
-On day pages, sort according to priority and position.	On plan
+On day pages, sort according to priority and position.  On plan
 pages, sort according to status, priority, date, and position."
   (interactive)
   (let ((case-fold-search nil)
