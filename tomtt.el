@@ -36,6 +36,23 @@ end"))
   ("pv" . "$${var}=#{$${var}} "))
 
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("it" . "$>it \"$${should}\" do
+$>$.
+  end"))
+
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("spec" . "require File.dirname(__FILE__) + '/spec_helper'
+require '$${class}'
+
+describe $${Class} do
+$>before(:each) do
+$>@$${class} = $${Class}.new
+  end
+
+$>$.
+end"))
+
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
   ("nsev" . "<%= show_event_detail('$${name}', Date.new(200$${8}, $${m}, $${d}), '$${time}', '$${location}', '$${price}', '$${band}', '$${formal}', '$${info}') %>"))
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
   ("nspgm" . "<%= render(:partial => \"$${label}_programme\") %>\n$><a href=\"/page/events/$${label}_programme\">View programme on single page</a>"))
