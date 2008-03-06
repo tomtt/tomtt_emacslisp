@@ -41,6 +41,21 @@ $>$.
   end"))
 
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("iteo" . "$>it \"should have an error on $${attribute}\" do
+$>@$${obj}.attributes = valid_$${obj}_attributes.except(:$${attribute})
+$>@$${obj}.should have(1).error_on(:$${attribute})
+  end"))
+
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("shelp" . "lib_path = File.expand_path(\"#{File.dirname(__FILE__)}/../lib\")
+$LOAD_PATH.unshift lib_path unless $LOAD_PATH.include?(lib_path)
+
+require 'rubygems'
+require 'spec'
+require 'ruby-debug'
+"))
+
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
   ("spec" . "require File.dirname(__FILE__) + '/spec_helper'
 require '$${class}'
 
@@ -53,9 +68,45 @@ $>$.
 end"))
 
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("matcher" . "class $${MatchThing}
+  def initialize($${expected})
+    @$${expected} = $${expected}
+  end
+
+  def matches?(actual)
+    @actual = actual
+    # Satisfy expectation here. Return false or raise an error if it's not met.
+    $.
+  end
+
+  def failure_message
+    \"expected #{@actual.inspect} to $${match_thing} #{@$${expected}.inspect}, but it didn't\"
+  end
+
+  def negative_failure_message
+    \"expected #{@actual.inspect} not to $${match_thing} #{@$${expected}.inspect}, but it did\"
+  end
+end
+
+def $${match_thing}($${expected})
+  $${MatchThing}.new($${expected})
+end"))
+
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
   ("nsev" . "<%= show_event_detail('$${name}', Date.new(200$${8}, $${m}, $${d}), '$${time}', '$${location}', '$${price}', '$${band}', '$${formal}', '$${info}') %>"))
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
   ("nspgm" . "<%= render(:partial => \"$${label}_programme\") %>\n$><a href=\"/page/events/$${label}_programme\">View programme on single page</a>"))
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
+  ("nspgmdef" . "def $${dance}_2008
+    programme_text = <<EOT
+$.
+EOT
+  create_program('$${dance}_2008', programme_text, \"$${name}\")
+end"))
+
+(snippet-with-abbrev-table 'haml-mode-abbrev-table
+  ("li" . "    %li
+$>$."))
 
 (defun html-indent-or-complete ()
   "Complete if point is at end of a word, otherwise indent line."
@@ -104,6 +155,12 @@ end"))
                    "tail"
                    "-n 130"
                    "-f" log-file)))
+
+(define-keys rails-minor-mode-map
+  ((rails-key "\C-c i s") 'it-start)
+  ((rails-key "\C-c i p") 'it-pend)
+  ((rails-key "\C-c i u") 'it-unpend))
+
 
 (provide 'tomtt)
 

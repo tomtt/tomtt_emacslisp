@@ -86,9 +86,11 @@
 (require 'anything)
 (require 'haml-mode)
 (require 'sass-mode)
+(require 'toggle)
 
-(require 'remember)
+(require 'remember-autoloads)
 (require 'tomtt)
+(require 'pastie)
 (require 'autotest)
 (require 'erc)
 (require 'git)
@@ -108,6 +110,12 @@
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
 (setq ecb-tip-of-the-day nil)
+(setq ecb-other-window-behavior 'only-edit)
+(setq ecb-windows-width 0.18)
+(setq ecb-compile-window-height 5)
+
+(ido-mode t)
+(setq ido-enable-prefix t)
 
 (setq c-basic-offset 4)
 
@@ -126,6 +134,7 @@
 (add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rjs\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.dryml\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("sake\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -177,6 +186,20 @@
 
 (global-set-key "\C-c e" 'ecb-activate)
 
+(define-key isearch-mode-map (kbd "C-o")
+  (lambda ()
+    (interactive)
+    (let ((case-fold-search isearch-case-fold-search))
+      (occur (if isearch-regexp isearch-string
+               (regexp-quote isearch-string))))))
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse)
+(setq uniquify-separator "|")
+(setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+
+
 ;; Setup for cygwin
 (if win32p
     (progn
@@ -209,4 +232,12 @@
 (message "My .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
                                     (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
 
+(fset 'it-start
+   [?\C-e ?  ?d ?o return ?e ?n ?d return ?\C-p tab ?\C-a return ?\C-p tab])
+(fset 'it-pend
+   [?\C-w return up tab ?p ?e ?d backspace ?n ?d ?i ?n ?g ?  ?d ?o return ?e ?n ?d ?\C-a tab ?\C-a return up ?\C-y escape ?\C-\\ ?\C-k ?\C-n ?\C-a ?\C-  ?\C-r ?p ?e ?n ?d ?i ?n ?g ?\C-a])
+(fset 'it-unpend
+   [?\C-w escape ?x ?s ?w ?i ?t ?c ?h ?- ?t ?o ?- ?b ?u ?f ?f ?e ?r return ?d ?o ?u ?n ?p ?e ?n ?d return ?\C-y up ?\C-k ?\C-k escape ?< ?\C-k ?\C-k ?\C-  escape ?> ?\C-w ?\C-x ?k return ?\C-y escape ?\C-\\])
+
 (require 'ansi-color)
+(org-agenda-list)
