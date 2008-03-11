@@ -69,6 +69,7 @@
 
 (setq semantic-load-turn-everything-on t)
 
+(require 'browse-kill-ring)
 (require 'php-mode)
 (require 'javascript-mode)
 (require 'python-mode)
@@ -77,8 +78,8 @@
 (require 'snippet)
 (require 'rails)
 (require 'semantic-load)
-(require 'w3m-util)
-(require 'w3m)
+;;(require 'w3m-util)
+;;(require 'w3m)
 ;;(load "mail")
 
 (require 'ecb)
@@ -151,20 +152,7 @@
    (shell-command-on-region (point-min) (point-max) "ruby"))
 
 (require 'color-theme)
-(color-theme-initialize)
-(load "color-theme-tomtt")
-
-;; light
-;(color-theme-high-contrast)
-
-;; dark
-;(color-theme-hober)
-
-;; dark with green text
-;(color-theme-euphoria)
-
-;; dark bold constructs
-;(color-theme-renegade)
+;;(color-theme-initialize)
 
 (require 'psvn)
 (setq svn-status-verbose nil)
@@ -229,6 +217,16 @@
 ;(plan)
 ;(delete-other-windows)
 
+(when (boundp 'aquamacs-version)
+  (emulate-mac-british-keyboard-mode t)
+  (setq initial-frame-alist '((background-color . "black") (left . 50)  ))
+  (setq default-frame-alist '((background-color . "black") (left . 0) (width . 141) (height . 44)))
+  (aquamacs-styles-mode 0)
+  (one-buffer-one-frame-mode 0)
+  (smart-frame-positioning-mode 0)
+  (define-key osx-key-mode-map (kbd "A-w") 'kill-ring-save) ;; I don't like how A-w kills my buffer so rebind it to something innocent
+)
+
 (message "My .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
                                     (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
 
@@ -241,3 +239,22 @@
 
 (require 'ansi-color)
 (org-agenda-list)
+
+;;(message "bla1")
+(defun mycolor ()
+  (interactive)
+  (load "color-theme-tomtt"))
+(mycolor)
+;;(message "bla2")
+
+;; light
+;(color-theme-high-contrast)
+
+;; dark
+;(color-theme-hober)
+
+;; dark with green text
+;(color-theme-euphoria)
+
+;; dark bold constructs
+;(color-theme-renegade)
