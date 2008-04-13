@@ -96,6 +96,7 @@
 (require 'erc)
 (require 'git-emacs)
 (require 'org)
+(require 'htmlize)
 (require 'tabbar)
 
 ;(load "tomtt-planner")
