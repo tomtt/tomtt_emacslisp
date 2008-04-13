@@ -94,7 +94,7 @@
 (require 'pastie)
 (require 'autotest)
 (require 'erc)
-(require 'git)
+(require 'git-emacs)
 (require 'org)
 (require 'tabbar)
 
