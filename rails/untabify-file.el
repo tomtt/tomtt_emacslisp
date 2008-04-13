@@ -49,7 +49,8 @@ save."
                                   (symbol (eq major-mode r)))))))
     (save-excursion
       (untabify (point-min) (point-max))
-      (delete-trailing-whitespace))))
+      ;; TtT: causes issues when sharing code ;; (delete-trailing-whitespace)
+)))
 
 (add-hook 'write-file-hooks 'untabify-before-write)
 
