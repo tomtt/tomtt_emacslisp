@@ -96,6 +96,7 @@
 (require 'erc)
 (require 'git)
 (require 'org)
+(require 'tabbar)
 
 ;(load "tomtt-planner")
 (load "tomtt-org")
@@ -162,13 +163,23 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(ecb-options-version "2.32"))
+ '(ecb-options-version "2.32")
+ '(org-agenda-files (quote ("~/created/org/todo.org")))
+ '(org-agenda-ndays 7)
+ '(org-agenda-show-all-dates t)
+ '(org-agenda-skip-deadline-if-done t)
+ '(org-agenda-skip-scheduled-if-done t)
+ '(org-agenda-start-on-weekday nil)
+ '(org-deadline-warning-days 14)
+ '(org-default-notes-file "~/created/org/notes.org")
+ '(org-reverse-note-order t))
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(default ((t (:stipple nil :background "black" :foreground "#c0c0c0" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal))))
  '(flymake-errline ((((class color)) (:background "DarkRed"))))
  '(flymake-warnline ((((class color)) (:background "DarkBlue")))))
 
@@ -213,7 +224,7 @@
       (add-hook 'comint-output-filter-functions
                 'comint-strip-ctrl-m)))
 
-;(server-start)
+(server-start)
 ;(plan)
 ;(delete-other-windows)
 
@@ -237,6 +248,10 @@
 (fset 'it-unpend
    [?\C-w escape ?x ?s ?w ?i ?t ?c ?h ?- ?t ?o ?- ?b ?u ?f ?f ?e ?r return ?d ?o ?u ?n ?p ?e ?n ?d return ?\C-y up ?\C-k ?\C-k escape ?< ?\C-k ?\C-k ?\C-  escape ?> ?\C-w ?\C-x ?k return ?\C-y escape ?\C-\\])
 
+(tabbar-mode t)
+(global-set-key [(control shift tab)] 'tabbar-backward)
+(global-set-key [(control tab)]       'tabbar-forward)
+
 (require 'ansi-color)
 (org-agenda-list)
 
@@ -258,3 +273,6 @@
 
 ;; dark bold constructs
 ;(color-theme-renegade)
+
+;; because you cannea do C-x # on a uk mac in aquamacs
+(global-set-key "\C-x\\" 'server-edit)
