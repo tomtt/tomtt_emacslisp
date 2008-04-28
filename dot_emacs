@@ -78,7 +78,7 @@
 (require 'snippet)
 (require 'rails)
 (require 'mode-compile)
-(require 'rspec-mode)
+;(require 'rspec-mode)
 (require 'semantic-load)
 ;;(require 'w3m-util)
 ;;(require 'w3m)
