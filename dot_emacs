@@ -106,6 +106,8 @@
 ;(load "tomtt-planner")
 (load "tomtt-org")
 
+(setq rails-enable-ruby-electric nil)
+
 (setq ri-ruby-script "/home/tomtt/.emacslisp/ruby/ri-emacs.rb")
 (autoload 'ri  "/home/tomtt/.emacslisp/ruby/ri-ruby.el" nil t)
 
