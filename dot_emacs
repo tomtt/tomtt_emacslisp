@@ -259,6 +259,11 @@
 (global-set-key [(control shift tab)] 'tabbar-backward)
 (global-set-key [(control tab)]       'tabbar-forward)
 
+(defun indent-buffer ()
+  (interactive)
+  (save-excursion)
+  (indent-region (point-min) (point-max)))
+
 (require 'ansi-color)
 (org-agenda-list)
 
