@@ -264,6 +264,15 @@
   (save-excursion)
   (indent-region (point-min) (point-max)))
 
+(defun open-line-at-end ()
+  (interactive)
+  (move-end-of-line 1)
+  (open-line 1)
+  (next-line)
+  (indent-for-tab-command))
+
+(global-set-key "\C-o" 'open-line-at-end)
+
 (require 'ansi-color)
 (org-agenda-list)
 
