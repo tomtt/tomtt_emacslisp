@@ -92,7 +92,9 @@
 (require 'toggle)
 
 (require 'remember-autoloads)
-(require 'tomtt)
+(require 'my-snippets)
+(require 'scratch)
+(require 'my-identity)
 (require 'pastie)
 (require 'autotest)
 (require 'erc)
@@ -103,13 +105,13 @@
 (require 'rcodetools)
 (require 'icicles-rcodetools)
 
-;(load "tomtt-planner")
-(load "tomtt-org")
+;(load "my-planner")
+(load "my-org")
 
 (setq rails-enable-ruby-electric nil)
 
-(setq ri-ruby-script "/home/tomtt/.emacslisp/ruby/ri-emacs.rb")
-(autoload 'ri  "/home/tomtt/.emacslisp/ruby/ri-ruby.el" nil t)
+(setq ri-ruby-script (concat (getenv "HOME") "/.emacslisp/ruby/ri-emacs.rb"))
+(autoload 'ri (concat (getenv "HOME") "/.emacslisp/ruby/ri-ruby.el") nil t)
 
 (setq ruby-electric-matching-delimeter-alist nil)
 (setq auto-mode-alist
