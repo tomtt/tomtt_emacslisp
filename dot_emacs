@@ -120,10 +120,6 @@
 (global-set-key "\C-c\C-f" 'anything)
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
-(setq ecb-tip-of-the-day nil)
-(setq ecb-other-window-behavior 'only-edit)
-(setq ecb-windows-width 0.18)
-(setq ecb-compile-window-height 5)
 
 (ido-mode t)
 (setq ido-enable-prefix t)
@@ -173,6 +169,11 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(ecb-options-version "2.32")
+ '(ecb-wget-setup (quote cons))
+ '(ecb-tip-of-the-day nil)
+ '(ecb-other-window-behavior 'only-edit)
+ '(ecb-windows-width 0.18)
+ '(ecb-compile-window-height 5)
  '(org-agenda-files (quote ("~/created/org/todo.org")))
  '(org-agenda-ndays 7)
  '(org-agenda-show-all-dates t)
