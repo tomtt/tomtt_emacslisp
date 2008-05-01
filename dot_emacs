@@ -248,6 +248,7 @@
   (next-line)
   (indent-for-tab-command))
 
+(global-set-key "\C-c\C-l" 'revert-buffer)
 (global-set-key "\C-o" 'open-line-at-end)
 
 (require 'ansi-color)
