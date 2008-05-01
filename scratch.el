@@ -55,4 +55,25 @@
 
 ;;(partial-completion-mode t)
 
+(defun indent-line-and-line-below ()
+  (interactive)
+  (c-indent-command)
+  (save-excursion
+    (move-beginning-of-line 2)
+    (c-indent-command)))
+
+(defun indent-line-below ()
+  (interactive)
+  (save-excursion
+    (move-beginning-of-line 2)
+    (c-indent-command)))
+
+;;(setq indent-line-function 'indent-line-and-line-below)
+
+(defadvice indent-for-tab-command (after also-indent-line-below ())
+  "When indenting current line, also indent the line below it."
+  (indent-line-below))
+(ad-activate 'indent-for-tab-command)
+
 (provide 'scratch)
+
