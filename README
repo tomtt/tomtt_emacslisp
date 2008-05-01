@@ -1,0 +1,12 @@
+This directory tries to be a working configuration for emacs working
+with emacs-rails mode. It is my personal config directory and it may
+or may not match your preferences so modify to your heart's
+consent. Such is the pleasure of Emacs.
+
+How to install:
+
+The files assume that they are in ~/.emacslisp and they are loaded by
+linking the dot_emacs file as .emacs in your home dir. The way I have
+set it up is I have two symlinks in my home dir: 
+ln -s /path/to/tomtt_emacslisp ~/.emacslisp
+ln -s /path/to/tomtt_emacslisp/dot_emacs ~/.emacs
