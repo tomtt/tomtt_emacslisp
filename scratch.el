@@ -75,5 +75,20 @@
   (indent-line-below))
 (ad-activate 'indent-for-tab-command)
 
+;; ffap for ruby
+(defvar ruby-program-name "ruby")
+(defun ruby-module-path(module)
+    (shell-command-to-string
+     (concat
+      ruby-program-name " -e "
+      "\"ret='()';$LOAD_PATH.each{|p| "
+      "x=p+'/'+ARGV[0].gsub('.rb', '')+'.rb';"
+      "ret=File.expand_path(x)"
+      "if(File.exist?(x))};printf ret\" "
+      module)))
+
+(eval-after-load "ffap"
+  '(push '(ruby-mode . ruby-module-path) ffap-alist))
+
 (provide 'scratch)
 
