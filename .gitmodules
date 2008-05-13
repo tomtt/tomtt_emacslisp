@@ -1,3 +1,6 @@
 [submodule "rails"]
 	path = rails
 	url = git://github.com/tomtt/emacs-rails.git
+[submodule "elisp_behave"]
+	path = elisp_behave
+	url = git://github.com/tomtt/elisp_behave.git
