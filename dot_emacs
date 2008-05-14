@@ -153,6 +153,7 @@
 (menu-bar-mode 1)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (global-font-lock-mode t)
+(setq lisp-indent-offset 2)
 
 ;; Ruby
 (defun ruby-eval-buffer () (interactive)
