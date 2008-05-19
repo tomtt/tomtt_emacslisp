@@ -78,7 +78,8 @@
 (global-set-key "\C-c\C-f" 'anything)
 
 (ido-mode t)
-(setq ido-enable-prefix t)
+;;(setq ido-enable-prefix nil)
+(setq ido-enable-flex-matching t)
 
 (setq c-basic-offset 4)
 
