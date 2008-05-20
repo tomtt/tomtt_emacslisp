@@ -67,6 +67,7 @@
 (add-to-load-path-if-exists "~/.emacslisp/ruby")
 (add-to-load-path-if-exists "~/.emacslisp/org")
 (add-to-load-path-if-exists "~/.emacslisp/elisp_behave")
+(add-to-load-path-if-exists "~/.emacslisp/icicles")
 
 (setq semantic-load-turn-everything-on t)
 
