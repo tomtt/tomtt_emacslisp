@@ -4,3 +4,6 @@
 [submodule "elisp_behave"]
 	path = elisp_behave
 	url = git://github.com/tomtt/elisp_behave.git
+[submodule "rinari"]
+	path = rinari
+	url = git://github.com/technomancy/rinari.git
