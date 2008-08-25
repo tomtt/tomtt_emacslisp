@@ -109,6 +109,7 @@
 (require 'tabbar)
 (require 'rcodetools)
 (require 'icicles-rcodetools)
+(require 'untabify-file)
 
 ;(load "my-planner")
 (load "my-org")
