@@ -65,6 +65,7 @@
 (add-to-load-path-if-exists "~/.emacslisp/remember")
 (add-to-load-path-if-exists "~/.emacslisp/git-emacs")
 (add-to-load-path-if-exists "~/.emacslisp/ruby")
+(add-to-load-path-if-exists "~/.emacslisp/rinari")
 (add-to-load-path-if-exists "~/.emacslisp/org")
 (add-to-load-path-if-exists "~/.emacslisp/elisp_behave")
 (add-to-load-path-if-exists "~/.emacslisp/icicles")
@@ -92,6 +93,7 @@
 (require 'haml-mode)
 (require 'sass-mode)
 (require 'toggle)
+(require 'rinari)
 
 (require 'remember-autoloads)
 (require 'my-snippets)
