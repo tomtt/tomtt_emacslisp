@@ -105,4 +105,7 @@ end"))
   ("li" . "    %li
 $>$."))
 
+(snippet-with-abbrev-table 'text-mode-abbrev-table
+  ("wbib" . "*{author} ($${year}). ''$${title}''. $${publisher}. ISBN 978-$${isbn}}"))
+
 (provide 'my-snippets)
