@@ -110,6 +110,8 @@
 (require 'rcodetools)
 (require 'icicles-rcodetools)
 (require 'untabify-file)
+(require 'yasnippet-bundle)
+(yas/initialize)
 
 ;(load "my-planner")
 (load "my-org")
